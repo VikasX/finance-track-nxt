@@ -1,0 +1,378 @@
+"use client";
+
+import {
+  useEffect,
+  useRef,
+  type ButtonHTMLAttributes,
+  type ReactNode,
+} from "react";
+import { Icon } from "./icon";
+
+export function Button({
+  children,
+  icon,
+  variant = "secondary",
+  className = "",
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & {
+  icon?: string;
+  variant?: "primary" | "secondary" | "ghost" | "danger";
+}) {
+  return (
+    <button
+      type="button"
+      className={`button button-${variant} ${className}`}
+      {...props}
+    >
+      {icon && <Icon name={icon} size={17} />}
+      {children}
+    </button>
+  );
+}
+export function Badge({
+  children,
+  tone = "purple",
+}: {
+  children: ReactNode;
+  tone?: "purple" | "green" | "amber" | "red" | "gray";
+}) {
+  return <span className={`badge badge-${tone}`}>{children}</span>;
+}
+export function Card({
+  children,
+  className = "",
+  title,
+  subtitle,
+  action,
+  id,
+}: {
+  children: ReactNode;
+  className?: string;
+  title?: string;
+  subtitle?: string;
+  action?: ReactNode;
+  id?: string;
+}) {
+  return (
+    <section id={id} className={`card ${className}`}>
+      {title && (
+        <div className="card-heading">
+          <div>
+            <h2>{title}</h2>
+            {subtitle && <p className="muted text-xs mt-1">{subtitle}</p>}
+          </div>
+          {action}
+        </div>
+      )}
+      {children}
+    </section>
+  );
+}
+export function PageHeading({
+  title,
+  description,
+  eyebrow,
+  badge,
+  actions,
+}: {
+  title: string;
+  description: string;
+  eyebrow?: string;
+  badge?: string;
+  actions?: ReactNode;
+}) {
+  return (
+    <div className="page-heading">
+      <div>
+        {eyebrow && (
+          <div className="eyebrow">
+            {eyebrow}
+            {badge && (
+              <span className="live-label">
+                <span />
+                {badge}
+              </span>
+            )}
+          </div>
+        )}
+        <h1>{title}</h1>
+        <p className="muted mt-1.5">{description}</p>
+      </div>
+      {actions && <div className="page-actions">{actions}</div>}
+    </div>
+  );
+}
+export function Metric({
+  label,
+  value,
+  icon,
+  detail,
+  footer,
+  tone = "",
+}: {
+  label: string;
+  value: ReactNode;
+  icon: string;
+  detail?: ReactNode;
+  footer?: ReactNode;
+  tone?: string;
+}) {
+  return (
+    <div className="card metric">
+      <div className="flex items-center justify-between gap-2">
+        <span className="metric-label">{label}</span>
+        <Icon name={icon} className={tone || "text-violet-600"} size={20} />
+      </div>
+      <div className={`metric-value ${tone}`}>{value}</div>
+      {detail && <div className="metric-detail">{detail}</div>}
+      {footer && <div className="metric-footer">{footer}</div>}
+    </div>
+  );
+}
+export function Tabs({
+  items,
+  value,
+  onChange,
+  label = "View",
+}: {
+  items: (string | { label: string; value: string })[];
+  value: string;
+  onChange: (value: string) => void;
+  label?: string;
+}) {
+  return (
+    <div className="tabs" role="tablist" aria-label={label}>
+      {items.map((item) => {
+        const itemValue = typeof item === "string" ? item : item.value;
+        const itemLabel = typeof item === "string" ? item : item.label;
+        return (
+          <button
+            type="button"
+            role="tab"
+            key={itemValue}
+            aria-selected={value === itemValue}
+            className={value === itemValue ? "active" : ""}
+            onClick={() => onChange(itemValue)}
+          >
+            {itemLabel}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+export function Progress({
+  value,
+  tone = "purple",
+}: {
+  value: number;
+  tone?: string;
+}) {
+  return (
+    <div
+      role="progressbar"
+      aria-valuenow={Math.round(value)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label="Allocation used"
+      className={`progress progress-${tone}`}
+    >
+      <span style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
+    </div>
+  );
+}
+export function EmptyState({
+  text = "No records match your selection.",
+}: {
+  text?: string;
+}) {
+  return (
+    <div className="empty-state">
+      <Icon name="search" size={28} />
+      <p>{text}</p>
+    </div>
+  );
+}
+export function Modal({
+  open,
+  onClose,
+  title,
+  subtitle,
+  children,
+  wide = false,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  subtitle?: string;
+  children: ReactNode;
+  wide?: boolean;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const dialog = ref.current;
+    if (open && dialog && !dialog.open) {
+      dialog.showModal();
+    } else if (!open && dialog?.open) {
+      dialog.close();
+    }
+    if (open) {
+      const previous = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = previous;
+      };
+    }
+  }, [open]);
+  return (
+    <dialog
+      ref={ref}
+      className={`modal ${wide ? "modal-wide" : ""}`}
+      onCancel={onClose}
+      onClose={onClose}
+      onClick={(event) => {
+        if (event.target === ref.current) onClose();
+      }}
+      aria-label={title}
+    >
+      <div className="modal-heading">
+        <div>
+          <h2>{title}</h2>
+          {subtitle && <p className="muted text-xs mt-1">{subtitle}</p>}
+        </div>
+        <button
+          type="button"
+          className="icon-button"
+          aria-label="Close dialog"
+          onClick={onClose}
+        >
+          <Icon name="close" />
+        </button>
+      </div>
+      {open && <div className="modal-content">{children}</div>}
+    </dialog>
+  );
+}
+export interface FormField {
+  name: string;
+  label: string;
+  type?: "text" | "number" | "date" | "email" | "tel" | "select" | "checkbox";
+  options?: string[];
+  value?: string | number | boolean;
+  min?: number;
+  max?: number;
+  step?: string;
+  required?: boolean;
+  placeholder?: string;
+}
+export function RecordForm({
+  fields,
+  onSave,
+  onCancel,
+  submit = "Save",
+  children,
+}: {
+  fields: FormField[];
+  onSave: (values: Record<string, string>) => void;
+  onCancel: () => void;
+  submit?: string;
+  children?: ReactNode;
+}) {
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        const form = new FormData(event.currentTarget);
+        onSave(
+          Object.fromEntries(
+            Array.from(form.entries()).map(([key, value]) => [
+              key,
+              String(value),
+            ]),
+          ),
+        );
+      }}
+    >
+      <div className="form-grid">
+        {fields.map((field) => (
+          <label
+            className={field.type === "checkbox" ? "checkbox-field" : "field"}
+            key={field.name}
+          >
+            <span>{field.label}</span>
+            {field.type === "select" ? (
+              <select
+                aria-label={field.label}
+                name={field.name}
+                defaultValue={String(field.value ?? field.options?.[0] ?? "")}
+                required={field.required !== false}
+              >
+                {field.options?.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </select>
+            ) : field.type === "checkbox" ? (
+              <input
+                name={field.name}
+                type="checkbox"
+                defaultChecked={Boolean(field.value)}
+              />
+            ) : (
+              <input
+                name={field.name}
+                type={field.type ?? "text"}
+                defaultValue={String(field.value ?? "")}
+                min={field.min}
+                max={field.max}
+                step={
+                  field.step ?? (field.type === "number" ? "0.01" : undefined)
+                }
+                required={field.required !== false}
+                placeholder={field.placeholder}
+              />
+            )}
+          </label>
+        ))}
+      </div>
+      {children}
+      <div className="modal-footer">
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button type="submit" variant="primary" icon="check">
+          {submit}
+        </Button>
+      </div>
+    </form>
+  );
+}
+export function ConfirmDelete({
+  open,
+  onClose,
+  onConfirm,
+  title = "Delete record?",
+  description = "This removes the record from this browser's demo data.",
+}: {
+  open: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title?: string;
+  description?: string;
+}) {
+  return (
+    <Modal open={open} onClose={onClose} title={title}>
+      <p className="muted">{description}</p>
+      <div className="modal-footer">
+        <Button onClick={onClose}>Cancel</Button>
+        <Button
+          variant="danger"
+          onClick={() => {
+            onConfirm();
+            onClose();
+          }}
+          icon="delete"
+        >
+          Delete
+        </Button>
+      </div>
+    </Modal>
+  );
+}
