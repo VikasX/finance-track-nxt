@@ -1,9 +1,18 @@
+/*
+ * tests/theme.spec.ts
+ * Browser checks for saved appearance, OS theme changes, tab synchronization, and dark-mode dialogs/charts/mobile navigation using isolated API fixtures.
+ * Beginner syntax: @/ means src/ (tsconfig paths); import type is compile-time only.
+ */
+// Import the existing Playwright test/assertion tools (or browser Page type). Assertions wait for UI conditions rather than assuming rendering is immediate.
 import { expect, test } from "@playwright/test";
+// Use isolated contract-shaped fixtures for tests; these records never replace real API data in the running application.
 import { mockApi } from "./api-fixture";
+// Install a fresh isolated API interceptor before each case. Appearance behavior is tested without depending on the deployed database or mutating it.
 test.beforeEach(async ({ page }) => {
   await mockApi(page);
 });
 
+// Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation.
 test("light and dark selection persist across navigation, reload, and tabs", async ({
   page,
   context,
@@ -41,6 +50,7 @@ test("light and dark selection persist across navigation, reload, and tabs", asy
   );
 });
 
+// Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation.
 test("system mode follows OS changes and an explicit preference overrides the OS", async ({
   page,
 }) => {
@@ -61,6 +71,7 @@ test("system mode follows OS changes and an explicit preference overrides the OS
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
+// Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation.
 test("all pages, dialogs, charts and mobile navigation support dark mode", async ({
   page,
 }) => {

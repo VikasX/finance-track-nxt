@@ -1,4 +1,12 @@
+/*
+ * src/components/charts.tsx
+ * Reusable Recharts visualizations. Pages adapt API results into numeric chart points; this file only draws those points with shared colors and theme-aware tooltips.
+ * "use client" marks the browser-interactive entry point: hooks/events or browser APIs
+ * need JavaScript after hydration. Next may still prerender its initial HTML on the server.
+ * Beginner syntax: @/ means src/ (tsconfig paths); import type is compile-time only.
+ */
 "use client";
+// Use shared chart components/palette. This caller prepares the data; the chart only renders it.
 import {
   Area,
   AreaChart,
@@ -15,7 +23,9 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+// Reuse formatting, local calculator, or download helpers. These utilities do not perform backend writes.
 import { compact, money } from "@/lib/finance";
+// The shared series/slice palette keeps legends and charts visually consistent across screens.
 export const CHART_COLORS = [
   "#7c3aed",
   "#c4b5fd",
@@ -23,6 +33,7 @@ export const CHART_COLORS = [
   "#94a3b8",
   "#f59e0b",
 ];
+// Describe the numeric fields charts can plot. name labels the x-axis; optional series let one reusable component support several chart variants.
 export interface ChartPoint {
   name: string;
   income?: number;
@@ -32,6 +43,7 @@ export interface ChartPoint {
   planned?: number;
   spent?: number;
 }
+// Use CSS theme variables so tooltips stay readable in light and dark appearances without changing chart data.
 const tooltipStyle = {
   border: "1px solid var(--line)",
   backgroundColor: "var(--surface)",
@@ -40,6 +52,7 @@ const tooltipStyle = {
   fontSize: 12,
   boxShadow: "0 4px 16px #0f172a0a",
 };
+// Accept already-prepared numeric data and choose a growth, budget, or cash-flow visualization. Recharts dataKey strings select the matching object fields.
 export function FinancialChart({
   data,
   type = "cashflow",
@@ -69,6 +82,7 @@ export function FinancialChart({
         minWidth={0}
         initialDimension={{ width: 600, height }}
       >
+        {/* Turn matching items into JSX with map. Each repeated element needs a stable key so React preserves the right row/control when data changes. */}
         {type === "growth" ? (
           <AreaChart
             data={data}
@@ -168,6 +182,7 @@ export function FinancialChart({
               radius={[4, 4, 0, 0]}
               maxBarSize={25}
             />
+            {/* Conditional JSX: render the following block only when the left-hand condition is truthy; otherwise React leaves it out. */}
             {showSurplus && (
               <Line
                 name="Surplus Delta"
@@ -185,6 +200,7 @@ export function FinancialChart({
     </div>
   );
 }
+// Draw a donut from name/value pairs and overlay a formatted total. Stable item names serve as React keys; the palette cycles if there are more slices than colors.
 export function AllocationChart({
   data,
   center,
@@ -217,6 +233,7 @@ export function AllocationChart({
             paddingAngle={3}
             stroke="none"
           >
+            {/* Turn matching items into JSX with map. Each repeated element needs a stable key so React preserves the right row/control when data changes. */}
             {data.map((item, index) => (
               <Cell
                 key={item.name}

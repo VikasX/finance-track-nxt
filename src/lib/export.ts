@@ -1,7 +1,16 @@
+/*
+ * src/lib/export.ts
+ * Creates PDF, ZIP, and Excel-compatible XML downloads from rows supplied by pages. It uses jsPDF/fflate and the download helper, without requesting new financial data itself.
+ * Beginner syntax: @/ means src/ (tsconfig paths); import type is compile-time only.
+ */
+// Use the existing document/ZIP dependency for browser exports instead of adding a new service or library.
 import { jsPDF } from "jspdf";
+// Use the existing document/ZIP dependency for browser exports instead of adding a new service or library.
 import { strToU8, zipSync } from "fflate";
+// Reuse formatting, local calculator, or download helpers. These utilities do not perform backend writes.
 import { downloadFile } from "./finance";
 
+// Lay out supplied rows in a PDF, wrapping long text and adding pages as needed. The document is a personal summary, not an official tax/bank certificate.
 export function reportPDF(title: string, rows: (string | number)[][]) {
   const pdf = new jsPDF();
   pdf.setFontSize(20);
@@ -19,6 +28,7 @@ export function reportPDF(title: string, rows: (string | number)[][]) {
   );
   let y = 55;
   rows.forEach((row) => {
+    // Prepare text by transforming each source item. map returns a new array; the response records remain available in their original shape.
     const text = row
       .map((cell) =>
         String(cell)
@@ -36,6 +46,7 @@ export function reportPDF(title: string, rows: (string | number)[][]) {
   });
   return pdf;
 }
+// Create the common report PDF and save it with the filename supplied by the screen.
 export function downloadPDF(
   filename: string,
   title: string,
@@ -43,8 +54,10 @@ export function downloadPDF(
 ) {
   reportPDF(title, rows).save(filename);
 }
+// Bundle a PDF and CSV into a ZIP. Byte arrays are needed by fflate/Blob; the existing download filename is retained even though the content is a financial summary.
 export function downloadReportPack(rows: (string | number)[][]) {
   const pdf = reportPDF("Financial Records Summary", rows);
+  // Prepare csv by transforming each source item. map returns a new array; the response records remain available in their original shape.
   const csv = rows
     .map((row) =>
       row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(","),
@@ -62,6 +75,7 @@ export function downloadReportPack(rows: (string | number)[][]) {
   anchor.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+// Escape XML-sensitive characters and generate spreadsheet XML. This is Excel-compatible text, not an XLSX workbook or a backend report endpoint.
 export function downloadExcel(filename: string, rows: (string | number)[][]) {
   const escape = (value: string) =>
     value
@@ -69,6 +83,7 @@ export function downloadExcel(filename: string, rows: (string | number)[][]) {
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;");
+  // Prepare xml by transforming each source item. map returns a new array; the response records remain available in their original shape.
   const xml = `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="FinTrack"><Table>${rows.map((row) => `<Row>${row.map((cell) => `<Cell><Data ss:Type="${typeof cell === "number" ? "Number" : "String"}">${escape(String(cell))}</Data></Cell>`).join("")}</Row>`).join("")}</Table></Worksheet></Workbook>`;
   downloadFile(filename, xml, "application/vnd.ms-excel");
 }

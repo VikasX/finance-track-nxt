@@ -1,4 +1,11 @@
+/*
+ * tests/fintrack.spec.ts
+ * Browser checks for every route, mobile layout, transaction CRUD, API filters, retry states, PPF writes, settings, and pagination after deletion.
+ * Beginner syntax: @/ means src/ (tsconfig paths); import type is compile-time only.
+ */
+// Import the existing Playwright test/assertion tools (or browser Page type). Assertions wait for UI conditions rather than assuming rendering is immediate.
 import { expect, test } from "@playwright/test";
+// Use isolated contract-shaped fixtures for tests; these records never replace real API data in the running application.
 import { mockApi } from "./api-fixture";
 const routes = [
   ["dashboard", "Financial Overview"],
@@ -12,6 +19,7 @@ const routes = [
   ["calendar", "Financial Calendar"],
   ["settings", "Settings"],
 ];
+// Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation.
 test("all pages load API data and preserve responsive layouts", async ({
   page,
 }) => {
@@ -43,6 +51,7 @@ test("all pages load API data and preserve responsive layouts", async ({
     ).toBe(true);
   }
 });
+// Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation.
 test("transaction POST, changed-only PATCH and 204 DELETE refresh affected data", async ({
   page,
 }) => {
@@ -90,6 +99,7 @@ test("transaction POST, changed-only PATCH and 204 DELETE refresh affected data"
     page.locator(".metric").first().locator(".metric-value"),
   ).toHaveText("₹36,500");
 });
+// Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation.
 test("server pagination and filters use contract query parameters", async ({
   page,
 }) => {
@@ -108,6 +118,7 @@ test("server pagination and filters use contract query parameters", async ({
   expect(url.searchParams.get("date_to")).toBe("2024-10-31");
   await expect(page.locator("tbody tr")).toHaveCount(1);
 });
+// Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation.
 test("loading, empty, error, retry and rejected writes remain truthful", async ({
   page,
 }) => {
@@ -162,6 +173,7 @@ test("loading, empty, error, retry and rejected writes remain truthful", async (
   );
   await expect(page.getByRole("dialog")).toBeVisible();
 });
+// Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation.
 test("PPF contribution writes update balance without duplicate account patches", async ({
   page,
 }) => {
@@ -190,6 +202,7 @@ test("PPF contribution writes update balance without duplicate account patches",
     page.locator(".metric").first().locator(".metric-value"),
   ).toHaveText("₹1,00,100");
 });
+// Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation.
 test("settings PATCH stays flat and shared categories remain read-only", async ({
   page,
 }) => {
@@ -217,6 +230,7 @@ test("settings PATCH stays flat and shared categories remain read-only", async (
   ).toBeDisabled();
 });
 
+// Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation.
 test("deleting the last server-paginated row returns to an existing page", async ({
   page,
 }) => {

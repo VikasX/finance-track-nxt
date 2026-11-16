@@ -1,4 +1,11 @@
+/*
+ * tests/module-writes.spec.ts
+ * Runs the same create-form workflow for each finance module and inspects outgoing bodies. This catches accidental submission of read-only/computed response fields.
+ * Beginner syntax: @/ means src/ (tsconfig paths); import type is compile-time only.
+ */
+// Import the existing Playwright test/assertion tools (or browser Page type). Assertions wait for UI conditions rather than assuming rendering is immediate.
 import { expect, test } from "@playwright/test";
+// Use isolated contract-shaped fixtures for tests; these records never replace real API data in the running application.
 import { mockApi } from "./api-fixture";
 const scenarios = [
   {
@@ -70,6 +77,7 @@ const scenarios = [
   },
 ];
 for (const scenario of scenarios)
+  // Exercise the behavior named below using the existing test runner. await waits for asynchronous work; expect checks the observable outcome rather than merely calling the implementation. The loop substitutes one module case at a time.
   test(`module create maps writable ${scenario.path} fields`, async ({
     page,
   }) => {

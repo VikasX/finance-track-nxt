@@ -1,4 +1,6 @@
+/* Global stylesheet loaded by app/layout.tsx. Tailwind utilities coexist with the reusable design classes below; this file controls presentation, not API behavior. */
 @import "tailwindcss";
+/* Expose existing theme/font values to Tailwind utility names. inline makes utility output refer to the underlying variables, keeping runtime theme switching compatible. */
 @theme inline {
   --color-background: var(--canvas);
   --color-foreground: var(--ink);
@@ -7,6 +9,7 @@
   --font-mono: var(--font-jetbrains);
   --font-heading: var(--font-manrope);
 }
+/* Default light palette. CSS custom properties (--name) are shared design tokens; var(--name) reads them in rules and chart styles. */
 :root {
   color-scheme: light;
   --canvas: #f7f9fb;
@@ -43,6 +46,7 @@
   --muted: #7b7487;
   --border: var(--line);
 }
+/* Override the same tokens when ThemeProvider/startup script sets data-theme on html. Components keep their layout/classes while colors change. */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --canvas: #0e111a;
@@ -77,9 +81,11 @@
   --chart-grid: #323b50;
   --chart-label: #a0a8bc;
 }
+/* Include padding/borders within declared widths. This makes shared grids and narrow-screen sizing easier to predict. */
 * {
   box-sizing: border-box;
 }
+/* Apply the root canvas, text color, and font once; most components inherit these rather than restating them. */
 body {
   margin: 0;
   background: var(--canvas);
@@ -158,6 +164,7 @@ textarea:focus {
 .font-mono {
   font-variant-numeric: tabular-nums;
 }
+/* Persistent desktop navigation frame. Later media queries turn it into a movable drawer on smaller screens. */
 .sidebar {
   position: fixed;
   inset: 0 auto 0 0;
@@ -231,9 +238,11 @@ textarea:focus {
   box-shadow: 0 2px 4px #7c3aed12;
   font-weight: 650;
 }
+/* Reserve room for the sidebar on desktop. Responsive overrides remove that offset when navigation becomes a drawer. */
 .app-main {
   padding-left: 256px;
 }
+/* Shared top bar for month/search/theme/actions. Its positioning and spacing apply across all routes. */
 .app-header {
   height: 64px;
   position: fixed;
@@ -523,11 +532,13 @@ textarea:focus {
   color: var(--secondary);
   background: var(--surface-muted);
 }
+/* Two-column content layout for primary/secondary cards. Media-query overrides below collapse it as the viewport narrows. */
 .grid-main {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   gap: 24px;
 }
+/* Equal card columns used across modules. Reusing this class preserves consistent spacing instead of repeating page-specific layout code. */
 .grid-halves {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -581,6 +592,7 @@ textarea:focus {
 .progress-light > span {
   background: #c4b5fd;
 }
+/* Chart container constraints let ResponsiveContainer measure the available width without overflowing its grid cell. */
 .chart {
   width: 100%;
   min-width: 0;
@@ -616,6 +628,7 @@ textarea:focus {
   font-family: var(--font-jetbrains);
   font-size: 11px;
 }
+/* Common table surface and borders; rows/columns still come from React. Horizontal scrolling is handled by the adjacent table-scroll rule. */
 .table-card {
   background: var(--surface);
   border-radius: 12px;
@@ -771,6 +784,7 @@ tbody tr:hover {
   background: var(--line-soft);
   margin: 18px 0;
 }
+/* Style the native dialog used by Modal. Opening/focus behavior belongs to the browser and the React ref/effect, not this CSS. */
 .modal {
   background: var(--surface);
   position: fixed;
@@ -787,6 +801,7 @@ tbody tr:hover {
 .modal-wide {
   width: min(850px, calc(100vw - 32px));
 }
+/* The browser creates this backdrop for showModal. It dims the existing page without adding a separate overlay element to every form. */
 .modal::backdrop {
   background: #0f172a40;
   backdrop-filter: blur(3px);
@@ -1469,6 +1484,7 @@ input[type="range"] {
 #security {
   scroll-margin-top: 88px;
 }
+/* Responsive/accessibility override: apply these rules only when this viewport or user-preference condition matches. Later matching rules override earlier ones. */
 @media (max-width: 1350px) {
   .goals-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1483,6 +1499,7 @@ input[type="range"] {
     gap: 16px;
   }
 }
+/* Responsive/accessibility override: apply these rules only when this viewport or user-preference condition matches. Later matching rules override earlier ones. */
 @media (max-width: 1023px) {
   .budget-grid,
   .deposit-grid,
@@ -1499,6 +1516,7 @@ input[type="range"] {
     font-size: 20px;
   }
 }
+/* Responsive/accessibility override: apply these rules only when this viewport or user-preference condition matches. Later matching rules override earlier ones. */
 @media (max-width: 639px) {
   .budget-grid,
   .deposit-grid,
@@ -1538,11 +1556,13 @@ input[type="range"] {
     min-height: 200px;
   }
 }
+/* Responsive/accessibility override: apply these rules only when this viewport or user-preference condition matches. Later matching rules override earlier ones. */
 @media (min-width: 1600px) {
   .metric-value {
     font-size: 30px;
   }
 }
+/* Responsive/accessibility override: apply these rules only when this viewport or user-preference condition matches. Later matching rules override earlier ones. */
 @media (max-width: 1279px) and (min-width: 1024px) {
   .sidebar {
     width: 72px;
@@ -1587,6 +1607,7 @@ input[type="range"] {
     justify-content: flex-end;
   }
 }
+/* Responsive/accessibility override: apply these rules only when this viewport or user-preference condition matches. Later matching rules override earlier ones. */
 @media (max-width: 1023px) {
   .sidebar {
     transform: translateX(-100%);
@@ -1641,6 +1662,7 @@ input[type="range"] {
     padding-top: 88px;
   }
 }
+/* Responsive/accessibility override: apply these rules only when this viewport or user-preference condition matches. Later matching rules override earlier ones. */
 @media (max-width: 639px) {
   body {
     font-size: 13px;
@@ -1760,6 +1782,7 @@ input[type="range"] {
   color: var(--secondary);
   background: var(--surface-muted);
 }
+/* Loading and error surfaces share the card layout. Separate visual states help distinguish waiting, failure, and empty successful data. */
 .api-state {
   min-height: 200px;
   display: flex;
@@ -1791,11 +1814,13 @@ input[type="range"] {
   border-radius: 50%;
   animation: api-spin 0.8s linear infinite;
 }
+/* Animate the existing loading indicator. The reduced-motion media query below respects visitors who prefer less animation. */
 @keyframes api-spin {
   to {
     transform: rotate(360deg);
   }
 }
+/* Responsive/accessibility override: apply these rules only when this viewport or user-preference condition matches. Later matching rules override earlier ones. */
 @media (prefers-reduced-motion: reduce) {
   .loading-spinner {
     animation-duration: 2s;
@@ -1865,6 +1890,7 @@ input[type="range"] {
 :root[data-theme="dark"] .heatmap-cell {
   box-shadow: inset 0 0 0 1px #ffffff0a;
 }
+/* Responsive/accessibility override: apply these rules only when this viewport or user-preference condition matches. Later matching rules override earlier ones. */
 @media (max-width: 639px) {
   .theme-control {
     width: 30px;
@@ -1880,6 +1906,7 @@ input[type="range"] {
     opacity: 0;
   }
 }
+/* Hide application controls and adapt the report layout for printing; these overrides do not change normal screen presentation. */
 @media print {
   :root[data-theme="dark"] {
     color-scheme: light;

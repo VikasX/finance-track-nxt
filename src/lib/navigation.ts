@@ -1,3 +1,9 @@
+/*
+ * src/lib/navigation.ts
+ * The sidebar menu data consumed by AppShell. Keeping route labels, URLs, and icon names together avoids repeating menu markup across pages.
+ * Beginner syntax: @/ means src/ (tsconfig paths); import type is compile-time only.
+ */
+// Group sidebar links as data; AppShell loops over these groups and marks the current URL active.
 export const navigation = [
   {
     group: "Main",

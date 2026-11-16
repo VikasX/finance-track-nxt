@@ -1,3 +1,9 @@
+/*
+ * scripts/smoke-api.mjs
+ * Read-only live-backend smoke checks, run with npm run test:api-live. Each requested endpoint must respond successfully with the expected basic contract shape.
+ * Beginner syntax: @/ means src/ (tsconfig paths); import type is compile-time only.
+ */
+// Choose the non-null schema branch to discover the real input type/format; anyOf expresses a union of allowed shapes.
 const base = (
   process.env.API_BASE_URL ||
   process.env.NEXT_PUBLIC_API_BASE_URL ||

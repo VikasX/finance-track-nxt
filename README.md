@@ -1,5 +1,7 @@
 # FinTrack
 
+Learning the project? Start with [the code-reading guide](docs/READING_CODE.md), which includes a reading order, request/form walkthroughs, and a glossary. Beginner-friendly comments in the maintained source explain how the pieces connect.
+
 Next.js App Router + TypeScript frontend for the FinTrack Google Stitch designs, connected to the FastAPI contract in [FRONTEND_HANDOFF.md](FRONTEND_HANDOFF.md) and [openapi.json](openapi.json). Styling, light/dark/system themes, and the existing deployment configuration are preserved.
 
 ## Run

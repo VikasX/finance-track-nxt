@@ -1,3 +1,9 @@
+/*
+ * src/components/ui/icon.tsx
+ * Maps design icon names to installed Lucide icons. Callers use consistent names without depending on a remote icon font.
+ * Beginner syntax: @/ means src/ (tsconfig paths); import type is compile-time only.
+ */
+// Import the installed SVG icon components; the name map below lets screens keep their existing design vocabulary without an external font request.
 import {
   Activity,
   ArrowDownLeft,
@@ -139,6 +145,7 @@ const icons: Record<string, LucideIcon> = {
   menu: Menu,
   wifi: Wifi,
 };
+// Resolve a design icon name to a Lucide component and apply shared sizing. Unknown names use the existing fallback instead of breaking the surrounding UI.
 export function Icon({
   name,
   size = 18,
@@ -148,6 +155,8 @@ export function Icon({
   size?: number;
   className?: string;
 }) {
+  // Select a component value from the name map. Capitalizing the local variable
+  // tells JSX that <Component> means a React component, not a new HTML tag.
   const Component = icons[name] ?? Activity;
   return (
     <Component
