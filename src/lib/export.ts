@@ -13,7 +13,7 @@ export function reportPDF(title: string, rows: (string | number)[][]) {
   pdf.setFontSize(9);
   pdf.setTextColor(100, 100, 110);
   pdf.text(
-    "Personal finance demo statement - not an official bank or tax certificate",
+    "Personal finance summary - not an official bank or tax certificate",
     16,
     41,
   );
@@ -44,7 +44,7 @@ export function downloadPDF(
   reportPDF(title, rows).save(filename);
 }
 export function downloadReportPack(rows: (string | number)[][]) {
-  const pdf = reportPDF("Annual Tax & Contribution Summary", rows);
+  const pdf = reportPDF("Financial Records Summary", rows);
   const csv = rows
     .map((row) =>
       row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(","),

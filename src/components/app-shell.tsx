@@ -3,29 +3,61 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
-import { navigation } from "@/lib/mock-data";
+import { navigation } from "@/lib/navigation";
 import { useFinance } from "./finance-provider";
 import { Icon } from "./ui/icon";
 import { Button } from "./ui/primitives";
 import { TransactionEditor } from "./transaction-editor";
-import { dateLabel, money } from "@/lib/finance";
+import { dateLabel } from "@/lib/finance";
+import { useApi, useDebounced } from "@/lib/api-cache";
+import { apiPath, errorMessage } from "@/lib/api-client";
+import type {
+  SettingsRead,
+  PageResult,
+  TransactionRead,
+  ReminderRead,
+} from "@/types/api";
+import { useAmount } from "./use-amount";
 import { ThemeControl } from "./theme-control";
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const { state, month, setMonth, transactionOpen, setTransactionOpen } =
-    useFinance();
+  const money = useAmount();
+  const { month, setMonth, transactionOpen, setTransactionOpen } = useFinance();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [notifications, setNotifications] = useState(false);
-  const matches = search.trim()
-    ? state.transactions
-        .filter((item) =>
-          `${item.name} ${item.category}`
-            .toLowerCase()
-            .includes(search.toLowerCase()),
-        )
-        .slice(0, 5)
-    : [];
+  const settings = useApi<SettingsRead>("/api/settings");
+  const settledSearch = useDebounced(search);
+  const searchQuery = useApi<PageResult<TransactionRead>>(
+    settledSearch.trim().length >= 2
+      ? apiPath("/api/transactions", { search: settledSearch, page_size: 5 })
+      : null,
+  );
+  const reminders = useApi<PageResult<ReminderRead>>(
+    notifications
+      ? "/api/reminders/upcoming?as_of=2024-11-01&days=30&include_overdue=true"
+      : null,
+  );
+  const state = {
+    preferences: {
+      name: settings.data?.profile.name ?? "Profile",
+      email: settings.data?.profile.email ?? "",
+      avatar: "",
+    },
+    events: (reminders.data?.items ?? []).map((event) => ({
+      id: event.id,
+      title: event.title,
+      date: event.due_date,
+      amount: event.amount == null ? null : Number(event.amount),
+      paid: false,
+    })),
+  };
+  const matches = (searchQuery.data?.items ?? []).map((item) => ({
+    id: item.id,
+    name: item.description,
+    date: item.transaction_date,
+    amount: Number(item.amount),
+  }));
   return (
     <>
       <a href="#main-content" className="skip-link">
@@ -109,7 +141,15 @@ export function AppShell({ children }: { children: ReactNode }) {
                     </Link>
                   ))
                 ) : (
-                  <p>No matching transactions.</p>
+                  <p>
+                    {searchQuery.error
+                      ? errorMessage(searchQuery.error)
+                      : searchQuery.loading && settledSearch.length >= 2
+                        ? "Searching…"
+                        : search.length < 2
+                          ? "Enter at least two characters."
+                          : "No matching transactions."}
+                  </p>
                 )}
               </div>
             )}
@@ -140,6 +180,13 @@ export function AppShell({ children }: { children: ReactNode }) {
               {notifications && (
                 <div className="notification-panel">
                   <strong>Upcoming reminders</strong>
+                  {reminders.error && (
+                    <p role="alert">
+                      {errorMessage(reminders.error)}{" "}
+                      <button onClick={reminders.retry}>Retry</button>
+                    </p>
+                  )}
+                  {reminders.loading && <p>Loading…</p>}
                   {state.events
                     .filter((event) => !event.paid)
                     .slice(0, 4)
@@ -151,7 +198,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                       >
                         <span>{event.title}</span>
                         <small>
-                          {dateLabel(event.date)} · {money(event.amount)}
+                          {dateLabel(event.date)} ·{" "}
+                          {event.amount == null ? "—" : money(event.amount)}
                         </small>
                       </Link>
                     ))}

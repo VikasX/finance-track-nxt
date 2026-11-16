@@ -1,0 +1,2659 @@
+{
+  "categories": {
+    "items": [
+      {
+        "name": "Salary",
+        "type": "income",
+        "id": 1,
+        "user_id": 1
+      },
+      {
+        "name": "Food & Dining",
+        "type": "expense",
+        "id": 2,
+        "user_id": 1
+      },
+      {
+        "name": "Shopping",
+        "type": "expense",
+        "id": 3,
+        "user_id": 1
+      },
+      {
+        "name": "Bills & Utilities",
+        "type": "expense",
+        "id": 4,
+        "user_id": 1
+      },
+      {
+        "name": "Transport & Fuel",
+        "type": "expense",
+        "id": 5,
+        "user_id": 1
+      },
+      {
+        "name": "Entertainment",
+        "type": "expense",
+        "id": 6,
+        "user_id": 1
+      },
+      {
+        "name": "Loan EMI",
+        "type": "loan_payment",
+        "id": 7,
+        "user_id": 1
+      },
+      {
+        "name": "Investment",
+        "type": "investment",
+        "id": 8,
+        "user_id": 1
+      }
+    ],
+    "total": 8,
+    "page": 1,
+    "page_size": 100
+  },
+  "transactions": {
+    "items": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "description": "Monthly Salary",
+        "amount": "120000.00",
+        "transaction_type": "income",
+        "transaction_date": "2024-10-31",
+        "category_id": 1,
+        "reference_code": "TX001",
+        "payment_method": "HDFC Bank",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 2,
+        "user_id": 1,
+        "description": "Groceries & Dining",
+        "amount": "14200.00",
+        "transaction_type": "expense",
+        "transaction_date": "2024-10-27",
+        "category_id": 2,
+        "reference_code": "TX002",
+        "payment_method": "ICICI Card",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 3,
+        "user_id": 1,
+        "description": "Shopping & Retail",
+        "amount": "8500.00",
+        "transaction_type": "expense",
+        "transaction_date": "2024-10-26",
+        "category_id": 3,
+        "reference_code": "TX003",
+        "payment_method": "UPI",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 8,
+        "user_id": 1,
+        "description": "Nifty 50 SIP",
+        "amount": "10000.00",
+        "transaction_type": "investment",
+        "transaction_date": "2024-10-25",
+        "category_id": 8,
+        "reference_code": "TX008",
+        "payment_method": "UPI",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 7,
+        "user_id": 1,
+        "description": "Home Loan EMI",
+        "amount": "28500.00",
+        "transaction_type": "loan_payment",
+        "transaction_date": "2024-10-24",
+        "category_id": 7,
+        "reference_code": "TX007",
+        "payment_method": "Auto Debit",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 4,
+        "user_id": 1,
+        "description": "Electricity & Internet",
+        "amount": "12100.00",
+        "transaction_type": "expense",
+        "transaction_date": "2024-10-20",
+        "category_id": 4,
+        "reference_code": "TX004",
+        "payment_method": "UPI",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 5,
+        "user_id": 1,
+        "description": "Petrol & Transport",
+        "amount": "4800.00",
+        "transaction_type": "expense",
+        "transaction_date": "2024-10-18",
+        "category_id": 5,
+        "reference_code": "TX005",
+        "payment_method": "Debit Card",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 6,
+        "user_id": 1,
+        "description": "Movies & Subscriptions",
+        "amount": "5400.00",
+        "transaction_type": "expense",
+        "transaction_date": "2024-10-16",
+        "category_id": 6,
+        "reference_code": "TX006",
+        "payment_method": "ICICI Card",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      }
+    ],
+    "total": 8,
+    "page": 1,
+    "page_size": 100
+  },
+  "budgets": {
+    "items": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "category_id": 2,
+        "budget_month": "2024-10-01",
+        "limit_amount": "18000.00",
+        "spent_amount": "14200.00",
+        "remaining_amount": "3800.00",
+        "usage_percent": "78.89"
+      },
+      {
+        "id": 2,
+        "user_id": 1,
+        "category_id": 3,
+        "budget_month": "2024-10-01",
+        "limit_amount": "15000.00",
+        "spent_amount": "8500.00",
+        "remaining_amount": "6500.00",
+        "usage_percent": "56.67"
+      },
+      {
+        "id": 3,
+        "user_id": 1,
+        "category_id": 4,
+        "budget_month": "2024-10-01",
+        "limit_amount": "12500.00",
+        "spent_amount": "12100.00",
+        "remaining_amount": "400.00",
+        "usage_percent": "96.80"
+      },
+      {
+        "id": 4,
+        "user_id": 1,
+        "category_id": 5,
+        "budget_month": "2024-10-01",
+        "limit_amount": "8000.00",
+        "spent_amount": "4800.00",
+        "remaining_amount": "3200.00",
+        "usage_percent": "60.00"
+      },
+      {
+        "id": 5,
+        "user_id": 1,
+        "category_id": 6,
+        "budget_month": "2024-10-01",
+        "limit_amount": "6000.00",
+        "spent_amount": "5400.00",
+        "remaining_amount": "600.00",
+        "usage_percent": "90.00"
+      }
+    ],
+    "total": 5,
+    "page": 1,
+    "page_size": 100
+  },
+  "loans": {
+    "items": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "loan_name": "HDFC Home Loan",
+        "loan_type": "home",
+        "principal": "2880000.00",
+        "outstanding_balance": "2850000.00",
+        "interest_rate": "8.550",
+        "tenure_months": 180,
+        "monthly_emi": "28500.00",
+        "start_date": "2024-01-05",
+        "account_reference": "LOAN001",
+        "next_due_date": "2024-11-05",
+        "status": "active",
+        "calculated_emi": "28444.97",
+        "estimated_total_interest": "2240095.10"
+      },
+      {
+        "id": 2,
+        "user_id": 1,
+        "loan_name": "ICICI Car Loan",
+        "loan_type": "vehicle",
+        "principal": "600000.00",
+        "outstanding_balance": "570000.00",
+        "interest_rate": "7.900",
+        "tenure_months": 48,
+        "monthly_emi": "14000.00",
+        "start_date": "2024-01-12",
+        "account_reference": "LOAN002",
+        "next_due_date": "2024-11-12",
+        "status": "active",
+        "calculated_emi": "14619.61",
+        "estimated_total_interest": "101741.06"
+      }
+    ],
+    "total": 2,
+    "page": 1,
+    "page_size": 100
+  },
+  "investments": {
+    "items": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "asset_type": "stock",
+        "name": "Reliance Industries",
+        "quantity": "100.0000",
+        "average_buy_price": "5000.00",
+        "current_price": "5800.00",
+        "symbol": "RELIANCE",
+        "purchase_date": "2023-11-01",
+        "monthly_sip": "0.00",
+        "next_sip_date": null,
+        "invested_value": "500000.00",
+        "current_value": "580000.00",
+        "gain_loss": "80000.00",
+        "gain_loss_percent": "16.00"
+      },
+      {
+        "id": 2,
+        "user_id": 1,
+        "asset_type": "mutual_fund",
+        "name": "Nifty 50 Index Fund",
+        "quantity": "1000.0000",
+        "average_buy_price": "280.00",
+        "current_price": "390.00",
+        "symbol": "NIFTY50MF",
+        "purchase_date": "2023-11-01",
+        "monthly_sip": "10000.00",
+        "next_sip_date": "2024-11-10",
+        "invested_value": "280000.00",
+        "current_value": "390000.00",
+        "gain_loss": "110000.00",
+        "gain_loss_percent": "39.29"
+      }
+    ],
+    "total": 2,
+    "page": 1,
+    "page_size": 100
+  },
+  "fixed-deposits": {
+    "items": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "bank_name": "Axis Bank",
+        "principal": "100000.00",
+        "interest_rate": "7.400",
+        "start_date": "2021-11-15",
+        "maturity_date": "2024-11-15",
+        "fd_reference": "FD001",
+        "compounding_frequency": "quarterly",
+        "status": "active",
+        "estimated_maturity_value": "124629.15",
+        "estimated_interest": "24629.15",
+        "estimated_current_value": "124629.15",
+        "calculation_basis": "Fixed stored rate, actual days / 365, fractional compound periods; before tax and penalties."
+      },
+      {
+        "id": 2,
+        "user_id": 1,
+        "bank_name": "HDFC Bank",
+        "principal": "50000.00",
+        "interest_rate": "7.100",
+        "start_date": "2023-07-22",
+        "maturity_date": "2025-07-22",
+        "fd_reference": "FD002",
+        "compounding_frequency": "quarterly",
+        "status": "active",
+        "estimated_maturity_value": "57568.20",
+        "estimated_interest": "7568.20",
+        "estimated_current_value": "57568.20",
+        "calculation_basis": "Fixed stored rate, actual days / 365, fractional compound periods; before tax and penalties."
+      },
+      {
+        "id": 3,
+        "user_id": 1,
+        "bank_name": "ICICI Bank",
+        "principal": "30000.00",
+        "interest_rate": "7.000",
+        "start_date": "2022-03-10",
+        "maturity_date": "2027-03-10",
+        "fd_reference": "FD003",
+        "compounding_frequency": "quarterly",
+        "status": "active",
+        "estimated_maturity_value": "42451.42",
+        "estimated_interest": "12451.42",
+        "estimated_current_value": "41541.23",
+        "calculation_basis": "Fixed stored rate, actual days / 365, fractional compound periods; before tax and penalties."
+      }
+    ],
+    "total": 3,
+    "page": 1,
+    "page_size": 100
+  },
+  "ppf": {
+    "items": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "opening_date": "2020-04-01",
+        "maturity_date": "2035-03-31",
+        "account_reference": "PPF001",
+        "bank_name": "SBI",
+        "opening_balance": "25000.00",
+        "current_balance": "100000.00",
+        "interest_rate": "7.100",
+        "total_contributions": "75000.00"
+      }
+    ],
+    "total": 1,
+    "page": 1,
+    "page_size": 100
+  },
+  "savings-goals": {
+    "items": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "name": "Emergency Fund",
+        "target_amount": "30000.00",
+        "saved_amount": "24000.00",
+        "target_date": "2025-03-31",
+        "remaining_amount": "6000.00",
+        "progress_percent": "80.00"
+      },
+      {
+        "id": 2,
+        "user_id": 1,
+        "name": "Japan Vacation",
+        "target_amount": "250000.00",
+        "saved_amount": "165000.00",
+        "target_date": "2025-12-31",
+        "remaining_amount": "85000.00",
+        "progress_percent": "66.00"
+      },
+      {
+        "id": 3,
+        "user_id": 1,
+        "name": "Home Renovation",
+        "target_amount": "150000.00",
+        "saved_amount": "90000.00",
+        "target_date": "2025-06-30",
+        "remaining_amount": "60000.00",
+        "progress_percent": "60.00"
+      }
+    ],
+    "total": 3,
+    "page": 1,
+    "page_size": 100
+  },
+  "reminders": {
+    "items": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "title": "Electricity Bill",
+        "due_date": "2024-11-20",
+        "amount": "2340.00",
+        "reminder_type": "bill",
+        "status": "pending"
+      },
+      {
+        "id": 2,
+        "user_id": 1,
+        "title": "Internet Bill",
+        "due_date": "2024-11-25",
+        "amount": "1899.00",
+        "reminder_type": "bill",
+        "status": "pending"
+      },
+      {
+        "id": 3,
+        "user_id": 1,
+        "title": "Insurance Renewal",
+        "due_date": "2024-12-02",
+        "amount": "8500.00",
+        "reminder_type": "insurance",
+        "status": "pending"
+      }
+    ],
+    "total": 3,
+    "page": 1,
+    "page_size": 100
+  },
+  "settings": {
+    "profile": {
+      "id": 1,
+      "name": "Alex Morgan",
+      "email": "demo@fintrack.local",
+      "created_at": "2026-11-15T22:11:56.928673Z"
+    },
+    "preferences": {
+      "currency": "INR",
+      "financial_year_start": 4,
+      "number_format": "indian"
+    }
+  },
+  "amortization": {
+    "loan_id": 1,
+    "basis": "Original principal, fixed stored annual rate, calculated EMI; first due one month after start. Not a payment history.",
+    "calculated_emi": "28444.97",
+    "reported_monthly_emi": "28500.00",
+    "total_payment": "5120095.10",
+    "total_interest": "2240095.10",
+    "schedule": [
+      {
+        "installment": 1,
+        "due_date": "2024-02-05",
+        "opening_balance": "2880000.00",
+        "payment": "28444.97",
+        "principal": "7924.97",
+        "interest": "20520.00",
+        "closing_balance": "2872075.03"
+      },
+      {
+        "installment": 2,
+        "due_date": "2024-03-05",
+        "opening_balance": "2872075.03",
+        "payment": "28444.97",
+        "principal": "7981.44",
+        "interest": "20463.53",
+        "closing_balance": "2864093.59"
+      },
+      {
+        "installment": 3,
+        "due_date": "2024-04-05",
+        "opening_balance": "2864093.59",
+        "payment": "28444.97",
+        "principal": "8038.30",
+        "interest": "20406.67",
+        "closing_balance": "2856055.29"
+      },
+      {
+        "installment": 4,
+        "due_date": "2024-05-05",
+        "opening_balance": "2856055.29",
+        "payment": "28444.97",
+        "principal": "8095.58",
+        "interest": "20349.39",
+        "closing_balance": "2847959.71"
+      },
+      {
+        "installment": 5,
+        "due_date": "2024-06-05",
+        "opening_balance": "2847959.71",
+        "payment": "28444.97",
+        "principal": "8153.26",
+        "interest": "20291.71",
+        "closing_balance": "2839806.45"
+      },
+      {
+        "installment": 6,
+        "due_date": "2024-07-05",
+        "opening_balance": "2839806.45",
+        "payment": "28444.97",
+        "principal": "8211.35",
+        "interest": "20233.62",
+        "closing_balance": "2831595.10"
+      },
+      {
+        "installment": 7,
+        "due_date": "2024-08-05",
+        "opening_balance": "2831595.10",
+        "payment": "28444.97",
+        "principal": "8269.85",
+        "interest": "20175.12",
+        "closing_balance": "2823325.25"
+      },
+      {
+        "installment": 8,
+        "due_date": "2024-09-05",
+        "opening_balance": "2823325.25",
+        "payment": "28444.97",
+        "principal": "8328.78",
+        "interest": "20116.19",
+        "closing_balance": "2814996.47"
+      },
+      {
+        "installment": 9,
+        "due_date": "2024-10-05",
+        "opening_balance": "2814996.47",
+        "payment": "28444.97",
+        "principal": "8388.12",
+        "interest": "20056.85",
+        "closing_balance": "2806608.35"
+      },
+      {
+        "installment": 10,
+        "due_date": "2024-11-05",
+        "opening_balance": "2806608.35",
+        "payment": "28444.97",
+        "principal": "8447.89",
+        "interest": "19997.08",
+        "closing_balance": "2798160.46"
+      },
+      {
+        "installment": 11,
+        "due_date": "2024-12-05",
+        "opening_balance": "2798160.46",
+        "payment": "28444.97",
+        "principal": "8508.08",
+        "interest": "19936.89",
+        "closing_balance": "2789652.38"
+      },
+      {
+        "installment": 12,
+        "due_date": "2025-01-05",
+        "opening_balance": "2789652.38",
+        "payment": "28444.97",
+        "principal": "8568.70",
+        "interest": "19876.27",
+        "closing_balance": "2781083.68"
+      },
+      {
+        "installment": 13,
+        "due_date": "2025-02-05",
+        "opening_balance": "2781083.68",
+        "payment": "28444.97",
+        "principal": "8629.75",
+        "interest": "19815.22",
+        "closing_balance": "2772453.93"
+      },
+      {
+        "installment": 14,
+        "due_date": "2025-03-05",
+        "opening_balance": "2772453.93",
+        "payment": "28444.97",
+        "principal": "8691.24",
+        "interest": "19753.73",
+        "closing_balance": "2763762.69"
+      },
+      {
+        "installment": 15,
+        "due_date": "2025-04-05",
+        "opening_balance": "2763762.69",
+        "payment": "28444.97",
+        "principal": "8753.16",
+        "interest": "19691.81",
+        "closing_balance": "2755009.53"
+      },
+      {
+        "installment": 16,
+        "due_date": "2025-05-05",
+        "opening_balance": "2755009.53",
+        "payment": "28444.97",
+        "principal": "8815.53",
+        "interest": "19629.44",
+        "closing_balance": "2746194.00"
+      },
+      {
+        "installment": 17,
+        "due_date": "2025-06-05",
+        "opening_balance": "2746194.00",
+        "payment": "28444.97",
+        "principal": "8878.34",
+        "interest": "19566.63",
+        "closing_balance": "2737315.66"
+      },
+      {
+        "installment": 18,
+        "due_date": "2025-07-05",
+        "opening_balance": "2737315.66",
+        "payment": "28444.97",
+        "principal": "8941.60",
+        "interest": "19503.37",
+        "closing_balance": "2728374.06"
+      },
+      {
+        "installment": 19,
+        "due_date": "2025-08-05",
+        "opening_balance": "2728374.06",
+        "payment": "28444.97",
+        "principal": "9005.30",
+        "interest": "19439.67",
+        "closing_balance": "2719368.76"
+      },
+      {
+        "installment": 20,
+        "due_date": "2025-09-05",
+        "opening_balance": "2719368.76",
+        "payment": "28444.97",
+        "principal": "9069.47",
+        "interest": "19375.50",
+        "closing_balance": "2710299.29"
+      },
+      {
+        "installment": 21,
+        "due_date": "2025-10-05",
+        "opening_balance": "2710299.29",
+        "payment": "28444.97",
+        "principal": "9134.09",
+        "interest": "19310.88",
+        "closing_balance": "2701165.20"
+      },
+      {
+        "installment": 22,
+        "due_date": "2025-11-05",
+        "opening_balance": "2701165.20",
+        "payment": "28444.97",
+        "principal": "9199.17",
+        "interest": "19245.80",
+        "closing_balance": "2691966.03"
+      },
+      {
+        "installment": 23,
+        "due_date": "2025-12-05",
+        "opening_balance": "2691966.03",
+        "payment": "28444.97",
+        "principal": "9264.71",
+        "interest": "19180.26",
+        "closing_balance": "2682701.32"
+      },
+      {
+        "installment": 24,
+        "due_date": "2026-01-05",
+        "opening_balance": "2682701.32",
+        "payment": "28444.97",
+        "principal": "9330.72",
+        "interest": "19114.25",
+        "closing_balance": "2673370.60"
+      },
+      {
+        "installment": 25,
+        "due_date": "2026-02-05",
+        "opening_balance": "2673370.60",
+        "payment": "28444.97",
+        "principal": "9397.20",
+        "interest": "19047.77",
+        "closing_balance": "2663973.40"
+      },
+      {
+        "installment": 26,
+        "due_date": "2026-03-05",
+        "opening_balance": "2663973.40",
+        "payment": "28444.97",
+        "principal": "9464.16",
+        "interest": "18980.81",
+        "closing_balance": "2654509.24"
+      },
+      {
+        "installment": 27,
+        "due_date": "2026-04-05",
+        "opening_balance": "2654509.24",
+        "payment": "28444.97",
+        "principal": "9531.59",
+        "interest": "18913.38",
+        "closing_balance": "2644977.65"
+      },
+      {
+        "installment": 28,
+        "due_date": "2026-05-05",
+        "opening_balance": "2644977.65",
+        "payment": "28444.97",
+        "principal": "9599.50",
+        "interest": "18845.47",
+        "closing_balance": "2635378.15"
+      },
+      {
+        "installment": 29,
+        "due_date": "2026-06-05",
+        "opening_balance": "2635378.15",
+        "payment": "28444.97",
+        "principal": "9667.90",
+        "interest": "18777.07",
+        "closing_balance": "2625710.25"
+      },
+      {
+        "installment": 30,
+        "due_date": "2026-07-05",
+        "opening_balance": "2625710.25",
+        "payment": "28444.97",
+        "principal": "9736.78",
+        "interest": "18708.19",
+        "closing_balance": "2615973.47"
+      },
+      {
+        "installment": 31,
+        "due_date": "2026-08-05",
+        "opening_balance": "2615973.47",
+        "payment": "28444.97",
+        "principal": "9806.16",
+        "interest": "18638.81",
+        "closing_balance": "2606167.31"
+      },
+      {
+        "installment": 32,
+        "due_date": "2026-09-05",
+        "opening_balance": "2606167.31",
+        "payment": "28444.97",
+        "principal": "9876.03",
+        "interest": "18568.94",
+        "closing_balance": "2596291.28"
+      },
+      {
+        "installment": 33,
+        "due_date": "2026-10-05",
+        "opening_balance": "2596291.28",
+        "payment": "28444.97",
+        "principal": "9946.39",
+        "interest": "18498.58",
+        "closing_balance": "2586344.89"
+      },
+      {
+        "installment": 34,
+        "due_date": "2026-11-05",
+        "opening_balance": "2586344.89",
+        "payment": "28444.97",
+        "principal": "10017.26",
+        "interest": "18427.71",
+        "closing_balance": "2576327.63"
+      },
+      {
+        "installment": 35,
+        "due_date": "2026-12-05",
+        "opening_balance": "2576327.63",
+        "payment": "28444.97",
+        "principal": "10088.64",
+        "interest": "18356.33",
+        "closing_balance": "2566238.99"
+      },
+      {
+        "installment": 36,
+        "due_date": "2027-01-05",
+        "opening_balance": "2566238.99",
+        "payment": "28444.97",
+        "principal": "10160.52",
+        "interest": "18284.45",
+        "closing_balance": "2556078.47"
+      },
+      {
+        "installment": 37,
+        "due_date": "2027-02-05",
+        "opening_balance": "2556078.47",
+        "payment": "28444.97",
+        "principal": "10232.91",
+        "interest": "18212.06",
+        "closing_balance": "2545845.56"
+      },
+      {
+        "installment": 38,
+        "due_date": "2027-03-05",
+        "opening_balance": "2545845.56",
+        "payment": "28444.97",
+        "principal": "10305.82",
+        "interest": "18139.15",
+        "closing_balance": "2535539.74"
+      },
+      {
+        "installment": 39,
+        "due_date": "2027-04-05",
+        "opening_balance": "2535539.74",
+        "payment": "28444.97",
+        "principal": "10379.25",
+        "interest": "18065.72",
+        "closing_balance": "2525160.49"
+      },
+      {
+        "installment": 40,
+        "due_date": "2027-05-05",
+        "opening_balance": "2525160.49",
+        "payment": "28444.97",
+        "principal": "10453.20",
+        "interest": "17991.77",
+        "closing_balance": "2514707.29"
+      },
+      {
+        "installment": 41,
+        "due_date": "2027-06-05",
+        "opening_balance": "2514707.29",
+        "payment": "28444.97",
+        "principal": "10527.68",
+        "interest": "17917.29",
+        "closing_balance": "2504179.61"
+      },
+      {
+        "installment": 42,
+        "due_date": "2027-07-05",
+        "opening_balance": "2504179.61",
+        "payment": "28444.97",
+        "principal": "10602.69",
+        "interest": "17842.28",
+        "closing_balance": "2493576.92"
+      },
+      {
+        "installment": 43,
+        "due_date": "2027-08-05",
+        "opening_balance": "2493576.92",
+        "payment": "28444.97",
+        "principal": "10678.23",
+        "interest": "17766.74",
+        "closing_balance": "2482898.69"
+      },
+      {
+        "installment": 44,
+        "due_date": "2027-09-05",
+        "opening_balance": "2482898.69",
+        "payment": "28444.97",
+        "principal": "10754.32",
+        "interest": "17690.65",
+        "closing_balance": "2472144.37"
+      },
+      {
+        "installment": 45,
+        "due_date": "2027-10-05",
+        "opening_balance": "2472144.37",
+        "payment": "28444.97",
+        "principal": "10830.94",
+        "interest": "17614.03",
+        "closing_balance": "2461313.43"
+      },
+      {
+        "installment": 46,
+        "due_date": "2027-11-05",
+        "opening_balance": "2461313.43",
+        "payment": "28444.97",
+        "principal": "10908.11",
+        "interest": "17536.86",
+        "closing_balance": "2450405.32"
+      },
+      {
+        "installment": 47,
+        "due_date": "2027-12-05",
+        "opening_balance": "2450405.32",
+        "payment": "28444.97",
+        "principal": "10985.83",
+        "interest": "17459.14",
+        "closing_balance": "2439419.49"
+      },
+      {
+        "installment": 48,
+        "due_date": "2028-01-05",
+        "opening_balance": "2439419.49",
+        "payment": "28444.97",
+        "principal": "11064.11",
+        "interest": "17380.86",
+        "closing_balance": "2428355.38"
+      },
+      {
+        "installment": 49,
+        "due_date": "2028-02-05",
+        "opening_balance": "2428355.38",
+        "payment": "28444.97",
+        "principal": "11142.94",
+        "interest": "17302.03",
+        "closing_balance": "2417212.44"
+      },
+      {
+        "installment": 50,
+        "due_date": "2028-03-05",
+        "opening_balance": "2417212.44",
+        "payment": "28444.97",
+        "principal": "11222.33",
+        "interest": "17222.64",
+        "closing_balance": "2405990.11"
+      },
+      {
+        "installment": 51,
+        "due_date": "2028-04-05",
+        "opening_balance": "2405990.11",
+        "payment": "28444.97",
+        "principal": "11302.29",
+        "interest": "17142.68",
+        "closing_balance": "2394687.82"
+      },
+      {
+        "installment": 52,
+        "due_date": "2028-05-05",
+        "opening_balance": "2394687.82",
+        "payment": "28444.97",
+        "principal": "11382.82",
+        "interest": "17062.15",
+        "closing_balance": "2383305.00"
+      },
+      {
+        "installment": 53,
+        "due_date": "2028-06-05",
+        "opening_balance": "2383305.00",
+        "payment": "28444.97",
+        "principal": "11463.92",
+        "interest": "16981.05",
+        "closing_balance": "2371841.08"
+      },
+      {
+        "installment": 54,
+        "due_date": "2028-07-05",
+        "opening_balance": "2371841.08",
+        "payment": "28444.97",
+        "principal": "11545.60",
+        "interest": "16899.37",
+        "closing_balance": "2360295.48"
+      },
+      {
+        "installment": 55,
+        "due_date": "2028-08-05",
+        "opening_balance": "2360295.48",
+        "payment": "28444.97",
+        "principal": "11627.86",
+        "interest": "16817.11",
+        "closing_balance": "2348667.62"
+      },
+      {
+        "installment": 56,
+        "due_date": "2028-09-05",
+        "opening_balance": "2348667.62",
+        "payment": "28444.97",
+        "principal": "11710.71",
+        "interest": "16734.26",
+        "closing_balance": "2336956.91"
+      },
+      {
+        "installment": 57,
+        "due_date": "2028-10-05",
+        "opening_balance": "2336956.91",
+        "payment": "28444.97",
+        "principal": "11794.15",
+        "interest": "16650.82",
+        "closing_balance": "2325162.76"
+      },
+      {
+        "installment": 58,
+        "due_date": "2028-11-05",
+        "opening_balance": "2325162.76",
+        "payment": "28444.97",
+        "principal": "11878.19",
+        "interest": "16566.78",
+        "closing_balance": "2313284.57"
+      },
+      {
+        "installment": 59,
+        "due_date": "2028-12-05",
+        "opening_balance": "2313284.57",
+        "payment": "28444.97",
+        "principal": "11962.82",
+        "interest": "16482.15",
+        "closing_balance": "2301321.75"
+      },
+      {
+        "installment": 60,
+        "due_date": "2029-01-05",
+        "opening_balance": "2301321.75",
+        "payment": "28444.97",
+        "principal": "12048.05",
+        "interest": "16396.92",
+        "closing_balance": "2289273.70"
+      },
+      {
+        "installment": 61,
+        "due_date": "2029-02-05",
+        "opening_balance": "2289273.70",
+        "payment": "28444.97",
+        "principal": "12133.89",
+        "interest": "16311.08",
+        "closing_balance": "2277139.81"
+      },
+      {
+        "installment": 62,
+        "due_date": "2029-03-05",
+        "opening_balance": "2277139.81",
+        "payment": "28444.97",
+        "principal": "12220.35",
+        "interest": "16224.62",
+        "closing_balance": "2264919.46"
+      },
+      {
+        "installment": 63,
+        "due_date": "2029-04-05",
+        "opening_balance": "2264919.46",
+        "payment": "28444.97",
+        "principal": "12307.42",
+        "interest": "16137.55",
+        "closing_balance": "2252612.04"
+      },
+      {
+        "installment": 64,
+        "due_date": "2029-05-05",
+        "opening_balance": "2252612.04",
+        "payment": "28444.97",
+        "principal": "12395.11",
+        "interest": "16049.86",
+        "closing_balance": "2240216.93"
+      },
+      {
+        "installment": 65,
+        "due_date": "2029-06-05",
+        "opening_balance": "2240216.93",
+        "payment": "28444.97",
+        "principal": "12483.42",
+        "interest": "15961.55",
+        "closing_balance": "2227733.51"
+      },
+      {
+        "installment": 66,
+        "due_date": "2029-07-05",
+        "opening_balance": "2227733.51",
+        "payment": "28444.97",
+        "principal": "12572.37",
+        "interest": "15872.60",
+        "closing_balance": "2215161.14"
+      },
+      {
+        "installment": 67,
+        "due_date": "2029-08-05",
+        "opening_balance": "2215161.14",
+        "payment": "28444.97",
+        "principal": "12661.95",
+        "interest": "15783.02",
+        "closing_balance": "2202499.19"
+      },
+      {
+        "installment": 68,
+        "due_date": "2029-09-05",
+        "opening_balance": "2202499.19",
+        "payment": "28444.97",
+        "principal": "12752.16",
+        "interest": "15692.81",
+        "closing_balance": "2189747.03"
+      },
+      {
+        "installment": 69,
+        "due_date": "2029-10-05",
+        "opening_balance": "2189747.03",
+        "payment": "28444.97",
+        "principal": "12843.02",
+        "interest": "15601.95",
+        "closing_balance": "2176904.01"
+      },
+      {
+        "installment": 70,
+        "due_date": "2029-11-05",
+        "opening_balance": "2176904.01",
+        "payment": "28444.97",
+        "principal": "12934.53",
+        "interest": "15510.44",
+        "closing_balance": "2163969.48"
+      },
+      {
+        "installment": 71,
+        "due_date": "2029-12-05",
+        "opening_balance": "2163969.48",
+        "payment": "28444.97",
+        "principal": "13026.69",
+        "interest": "15418.28",
+        "closing_balance": "2150942.79"
+      },
+      {
+        "installment": 72,
+        "due_date": "2030-01-05",
+        "opening_balance": "2150942.79",
+        "payment": "28444.97",
+        "principal": "13119.50",
+        "interest": "15325.47",
+        "closing_balance": "2137823.29"
+      },
+      {
+        "installment": 73,
+        "due_date": "2030-02-05",
+        "opening_balance": "2137823.29",
+        "payment": "28444.97",
+        "principal": "13212.98",
+        "interest": "15231.99",
+        "closing_balance": "2124610.31"
+      },
+      {
+        "installment": 74,
+        "due_date": "2030-03-05",
+        "opening_balance": "2124610.31",
+        "payment": "28444.97",
+        "principal": "13307.12",
+        "interest": "15137.85",
+        "closing_balance": "2111303.19"
+      },
+      {
+        "installment": 75,
+        "due_date": "2030-04-05",
+        "opening_balance": "2111303.19",
+        "payment": "28444.97",
+        "principal": "13401.93",
+        "interest": "15043.04",
+        "closing_balance": "2097901.26"
+      },
+      {
+        "installment": 76,
+        "due_date": "2030-05-05",
+        "opening_balance": "2097901.26",
+        "payment": "28444.97",
+        "principal": "13497.42",
+        "interest": "14947.55",
+        "closing_balance": "2084403.84"
+      },
+      {
+        "installment": 77,
+        "due_date": "2030-06-05",
+        "opening_balance": "2084403.84",
+        "payment": "28444.97",
+        "principal": "13593.59",
+        "interest": "14851.38",
+        "closing_balance": "2070810.25"
+      },
+      {
+        "installment": 78,
+        "due_date": "2030-07-05",
+        "opening_balance": "2070810.25",
+        "payment": "28444.97",
+        "principal": "13690.45",
+        "interest": "14754.52",
+        "closing_balance": "2057119.80"
+      },
+      {
+        "installment": 79,
+        "due_date": "2030-08-05",
+        "opening_balance": "2057119.80",
+        "payment": "28444.97",
+        "principal": "13787.99",
+        "interest": "14656.98",
+        "closing_balance": "2043331.81"
+      },
+      {
+        "installment": 80,
+        "due_date": "2030-09-05",
+        "opening_balance": "2043331.81",
+        "payment": "28444.97",
+        "principal": "13886.23",
+        "interest": "14558.74",
+        "closing_balance": "2029445.58"
+      },
+      {
+        "installment": 81,
+        "due_date": "2030-10-05",
+        "opening_balance": "2029445.58",
+        "payment": "28444.97",
+        "principal": "13985.17",
+        "interest": "14459.80",
+        "closing_balance": "2015460.41"
+      },
+      {
+        "installment": 82,
+        "due_date": "2030-11-05",
+        "opening_balance": "2015460.41",
+        "payment": "28444.97",
+        "principal": "14084.81",
+        "interest": "14360.16",
+        "closing_balance": "2001375.60"
+      },
+      {
+        "installment": 83,
+        "due_date": "2030-12-05",
+        "opening_balance": "2001375.60",
+        "payment": "28444.97",
+        "principal": "14185.17",
+        "interest": "14259.80",
+        "closing_balance": "1987190.43"
+      },
+      {
+        "installment": 84,
+        "due_date": "2031-01-05",
+        "opening_balance": "1987190.43",
+        "payment": "28444.97",
+        "principal": "14286.24",
+        "interest": "14158.73",
+        "closing_balance": "1972904.19"
+      },
+      {
+        "installment": 85,
+        "due_date": "2031-02-05",
+        "opening_balance": "1972904.19",
+        "payment": "28444.97",
+        "principal": "14388.03",
+        "interest": "14056.94",
+        "closing_balance": "1958516.16"
+      },
+      {
+        "installment": 86,
+        "due_date": "2031-03-05",
+        "opening_balance": "1958516.16",
+        "payment": "28444.97",
+        "principal": "14490.54",
+        "interest": "13954.43",
+        "closing_balance": "1944025.62"
+      },
+      {
+        "installment": 87,
+        "due_date": "2031-04-05",
+        "opening_balance": "1944025.62",
+        "payment": "28444.97",
+        "principal": "14593.79",
+        "interest": "13851.18",
+        "closing_balance": "1929431.83"
+      },
+      {
+        "installment": 88,
+        "due_date": "2031-05-05",
+        "opening_balance": "1929431.83",
+        "payment": "28444.97",
+        "principal": "14697.77",
+        "interest": "13747.20",
+        "closing_balance": "1914734.06"
+      },
+      {
+        "installment": 89,
+        "due_date": "2031-06-05",
+        "opening_balance": "1914734.06",
+        "payment": "28444.97",
+        "principal": "14802.49",
+        "interest": "13642.48",
+        "closing_balance": "1899931.57"
+      },
+      {
+        "installment": 90,
+        "due_date": "2031-07-05",
+        "opening_balance": "1899931.57",
+        "payment": "28444.97",
+        "principal": "14907.96",
+        "interest": "13537.01",
+        "closing_balance": "1885023.61"
+      },
+      {
+        "installment": 91,
+        "due_date": "2031-08-05",
+        "opening_balance": "1885023.61",
+        "payment": "28444.97",
+        "principal": "15014.18",
+        "interest": "13430.79",
+        "closing_balance": "1870009.43"
+      },
+      {
+        "installment": 92,
+        "due_date": "2031-09-05",
+        "opening_balance": "1870009.43",
+        "payment": "28444.97",
+        "principal": "15121.15",
+        "interest": "13323.82",
+        "closing_balance": "1854888.28"
+      },
+      {
+        "installment": 93,
+        "due_date": "2031-10-05",
+        "opening_balance": "1854888.28",
+        "payment": "28444.97",
+        "principal": "15228.89",
+        "interest": "13216.08",
+        "closing_balance": "1839659.39"
+      },
+      {
+        "installment": 94,
+        "due_date": "2031-11-05",
+        "opening_balance": "1839659.39",
+        "payment": "28444.97",
+        "principal": "15337.40",
+        "interest": "13107.57",
+        "closing_balance": "1824321.99"
+      },
+      {
+        "installment": 95,
+        "due_date": "2031-12-05",
+        "opening_balance": "1824321.99",
+        "payment": "28444.97",
+        "principal": "15446.68",
+        "interest": "12998.29",
+        "closing_balance": "1808875.31"
+      },
+      {
+        "installment": 96,
+        "due_date": "2032-01-05",
+        "opening_balance": "1808875.31",
+        "payment": "28444.97",
+        "principal": "15556.73",
+        "interest": "12888.24",
+        "closing_balance": "1793318.58"
+      },
+      {
+        "installment": 97,
+        "due_date": "2032-02-05",
+        "opening_balance": "1793318.58",
+        "payment": "28444.97",
+        "principal": "15667.58",
+        "interest": "12777.39",
+        "closing_balance": "1777651.00"
+      },
+      {
+        "installment": 98,
+        "due_date": "2032-03-05",
+        "opening_balance": "1777651.00",
+        "payment": "28444.97",
+        "principal": "15779.21",
+        "interest": "12665.76",
+        "closing_balance": "1761871.79"
+      },
+      {
+        "installment": 99,
+        "due_date": "2032-04-05",
+        "opening_balance": "1761871.79",
+        "payment": "28444.97",
+        "principal": "15891.63",
+        "interest": "12553.34",
+        "closing_balance": "1745980.16"
+      },
+      {
+        "installment": 100,
+        "due_date": "2032-05-05",
+        "opening_balance": "1745980.16",
+        "payment": "28444.97",
+        "principal": "16004.86",
+        "interest": "12440.11",
+        "closing_balance": "1729975.30"
+      },
+      {
+        "installment": 101,
+        "due_date": "2032-06-05",
+        "opening_balance": "1729975.30",
+        "payment": "28444.97",
+        "principal": "16118.90",
+        "interest": "12326.07",
+        "closing_balance": "1713856.40"
+      },
+      {
+        "installment": 102,
+        "due_date": "2032-07-05",
+        "opening_balance": "1713856.40",
+        "payment": "28444.97",
+        "principal": "16233.74",
+        "interest": "12211.23",
+        "closing_balance": "1697622.66"
+      },
+      {
+        "installment": 103,
+        "due_date": "2032-08-05",
+        "opening_balance": "1697622.66",
+        "payment": "28444.97",
+        "principal": "16349.41",
+        "interest": "12095.56",
+        "closing_balance": "1681273.25"
+      },
+      {
+        "installment": 104,
+        "due_date": "2032-09-05",
+        "opening_balance": "1681273.25",
+        "payment": "28444.97",
+        "principal": "16465.90",
+        "interest": "11979.07",
+        "closing_balance": "1664807.35"
+      },
+      {
+        "installment": 105,
+        "due_date": "2032-10-05",
+        "opening_balance": "1664807.35",
+        "payment": "28444.97",
+        "principal": "16583.22",
+        "interest": "11861.75",
+        "closing_balance": "1648224.13"
+      },
+      {
+        "installment": 106,
+        "due_date": "2032-11-05",
+        "opening_balance": "1648224.13",
+        "payment": "28444.97",
+        "principal": "16701.37",
+        "interest": "11743.60",
+        "closing_balance": "1631522.76"
+      },
+      {
+        "installment": 107,
+        "due_date": "2032-12-05",
+        "opening_balance": "1631522.76",
+        "payment": "28444.97",
+        "principal": "16820.37",
+        "interest": "11624.60",
+        "closing_balance": "1614702.39"
+      },
+      {
+        "installment": 108,
+        "due_date": "2033-01-05",
+        "opening_balance": "1614702.39",
+        "payment": "28444.97",
+        "principal": "16940.22",
+        "interest": "11504.75",
+        "closing_balance": "1597762.17"
+      },
+      {
+        "installment": 109,
+        "due_date": "2033-02-05",
+        "opening_balance": "1597762.17",
+        "payment": "28444.97",
+        "principal": "17060.91",
+        "interest": "11384.06",
+        "closing_balance": "1580701.26"
+      },
+      {
+        "installment": 110,
+        "due_date": "2033-03-05",
+        "opening_balance": "1580701.26",
+        "payment": "28444.97",
+        "principal": "17182.47",
+        "interest": "11262.50",
+        "closing_balance": "1563518.79"
+      },
+      {
+        "installment": 111,
+        "due_date": "2033-04-05",
+        "opening_balance": "1563518.79",
+        "payment": "28444.97",
+        "principal": "17304.90",
+        "interest": "11140.07",
+        "closing_balance": "1546213.89"
+      },
+      {
+        "installment": 112,
+        "due_date": "2033-05-05",
+        "opening_balance": "1546213.89",
+        "payment": "28444.97",
+        "principal": "17428.20",
+        "interest": "11016.77",
+        "closing_balance": "1528785.69"
+      },
+      {
+        "installment": 113,
+        "due_date": "2033-06-05",
+        "opening_balance": "1528785.69",
+        "payment": "28444.97",
+        "principal": "17552.37",
+        "interest": "10892.60",
+        "closing_balance": "1511233.32"
+      },
+      {
+        "installment": 114,
+        "due_date": "2033-07-05",
+        "opening_balance": "1511233.32",
+        "payment": "28444.97",
+        "principal": "17677.43",
+        "interest": "10767.54",
+        "closing_balance": "1493555.89"
+      },
+      {
+        "installment": 115,
+        "due_date": "2033-08-05",
+        "opening_balance": "1493555.89",
+        "payment": "28444.97",
+        "principal": "17803.38",
+        "interest": "10641.59",
+        "closing_balance": "1475752.51"
+      },
+      {
+        "installment": 116,
+        "due_date": "2033-09-05",
+        "opening_balance": "1475752.51",
+        "payment": "28444.97",
+        "principal": "17930.23",
+        "interest": "10514.74",
+        "closing_balance": "1457822.28"
+      },
+      {
+        "installment": 117,
+        "due_date": "2033-10-05",
+        "opening_balance": "1457822.28",
+        "payment": "28444.97",
+        "principal": "18057.99",
+        "interest": "10386.98",
+        "closing_balance": "1439764.29"
+      },
+      {
+        "installment": 118,
+        "due_date": "2033-11-05",
+        "opening_balance": "1439764.29",
+        "payment": "28444.97",
+        "principal": "18186.65",
+        "interest": "10258.32",
+        "closing_balance": "1421577.64"
+      },
+      {
+        "installment": 119,
+        "due_date": "2033-12-05",
+        "opening_balance": "1421577.64",
+        "payment": "28444.97",
+        "principal": "18316.23",
+        "interest": "10128.74",
+        "closing_balance": "1403261.41"
+      },
+      {
+        "installment": 120,
+        "due_date": "2034-01-05",
+        "opening_balance": "1403261.41",
+        "payment": "28444.97",
+        "principal": "18446.73",
+        "interest": "9998.24",
+        "closing_balance": "1384814.68"
+      },
+      {
+        "installment": 121,
+        "due_date": "2034-02-05",
+        "opening_balance": "1384814.68",
+        "payment": "28444.97",
+        "principal": "18578.17",
+        "interest": "9866.80",
+        "closing_balance": "1366236.51"
+      },
+      {
+        "installment": 122,
+        "due_date": "2034-03-05",
+        "opening_balance": "1366236.51",
+        "payment": "28444.97",
+        "principal": "18710.53",
+        "interest": "9734.44",
+        "closing_balance": "1347525.98"
+      },
+      {
+        "installment": 123,
+        "due_date": "2034-04-05",
+        "opening_balance": "1347525.98",
+        "payment": "28444.97",
+        "principal": "18843.85",
+        "interest": "9601.12",
+        "closing_balance": "1328682.13"
+      },
+      {
+        "installment": 124,
+        "due_date": "2034-05-05",
+        "opening_balance": "1328682.13",
+        "payment": "28444.97",
+        "principal": "18978.11",
+        "interest": "9466.86",
+        "closing_balance": "1309704.02"
+      },
+      {
+        "installment": 125,
+        "due_date": "2034-06-05",
+        "opening_balance": "1309704.02",
+        "payment": "28444.97",
+        "principal": "19113.33",
+        "interest": "9331.64",
+        "closing_balance": "1290590.69"
+      },
+      {
+        "installment": 126,
+        "due_date": "2034-07-05",
+        "opening_balance": "1290590.69",
+        "payment": "28444.97",
+        "principal": "19249.51",
+        "interest": "9195.46",
+        "closing_balance": "1271341.18"
+      },
+      {
+        "installment": 127,
+        "due_date": "2034-08-05",
+        "opening_balance": "1271341.18",
+        "payment": "28444.97",
+        "principal": "19386.66",
+        "interest": "9058.31",
+        "closing_balance": "1251954.52"
+      },
+      {
+        "installment": 128,
+        "due_date": "2034-09-05",
+        "opening_balance": "1251954.52",
+        "payment": "28444.97",
+        "principal": "19524.79",
+        "interest": "8920.18",
+        "closing_balance": "1232429.73"
+      },
+      {
+        "installment": 129,
+        "due_date": "2034-10-05",
+        "opening_balance": "1232429.73",
+        "payment": "28444.97",
+        "principal": "19663.91",
+        "interest": "8781.06",
+        "closing_balance": "1212765.82"
+      },
+      {
+        "installment": 130,
+        "due_date": "2034-11-05",
+        "opening_balance": "1212765.82",
+        "payment": "28444.97",
+        "principal": "19804.01",
+        "interest": "8640.96",
+        "closing_balance": "1192961.81"
+      },
+      {
+        "installment": 131,
+        "due_date": "2034-12-05",
+        "opening_balance": "1192961.81",
+        "payment": "28444.97",
+        "principal": "19945.12",
+        "interest": "8499.85",
+        "closing_balance": "1173016.69"
+      },
+      {
+        "installment": 132,
+        "due_date": "2035-01-05",
+        "opening_balance": "1173016.69",
+        "payment": "28444.97",
+        "principal": "20087.23",
+        "interest": "8357.74",
+        "closing_balance": "1152929.46"
+      },
+      {
+        "installment": 133,
+        "due_date": "2035-02-05",
+        "opening_balance": "1152929.46",
+        "payment": "28444.97",
+        "principal": "20230.35",
+        "interest": "8214.62",
+        "closing_balance": "1132699.11"
+      },
+      {
+        "installment": 134,
+        "due_date": "2035-03-05",
+        "opening_balance": "1132699.11",
+        "payment": "28444.97",
+        "principal": "20374.49",
+        "interest": "8070.48",
+        "closing_balance": "1112324.62"
+      },
+      {
+        "installment": 135,
+        "due_date": "2035-04-05",
+        "opening_balance": "1112324.62",
+        "payment": "28444.97",
+        "principal": "20519.66",
+        "interest": "7925.31",
+        "closing_balance": "1091804.96"
+      },
+      {
+        "installment": 136,
+        "due_date": "2035-05-05",
+        "opening_balance": "1091804.96",
+        "payment": "28444.97",
+        "principal": "20665.86",
+        "interest": "7779.11",
+        "closing_balance": "1071139.10"
+      },
+      {
+        "installment": 137,
+        "due_date": "2035-06-05",
+        "opening_balance": "1071139.10",
+        "payment": "28444.97",
+        "principal": "20813.10",
+        "interest": "7631.87",
+        "closing_balance": "1050326.00"
+      },
+      {
+        "installment": 138,
+        "due_date": "2035-07-05",
+        "opening_balance": "1050326.00",
+        "payment": "28444.97",
+        "principal": "20961.40",
+        "interest": "7483.57",
+        "closing_balance": "1029364.60"
+      },
+      {
+        "installment": 139,
+        "due_date": "2035-08-05",
+        "opening_balance": "1029364.60",
+        "payment": "28444.97",
+        "principal": "21110.75",
+        "interest": "7334.22",
+        "closing_balance": "1008253.85"
+      },
+      {
+        "installment": 140,
+        "due_date": "2035-09-05",
+        "opening_balance": "1008253.85",
+        "payment": "28444.97",
+        "principal": "21261.16",
+        "interest": "7183.81",
+        "closing_balance": "986992.69"
+      },
+      {
+        "installment": 141,
+        "due_date": "2035-10-05",
+        "opening_balance": "986992.69",
+        "payment": "28444.97",
+        "principal": "21412.65",
+        "interest": "7032.32",
+        "closing_balance": "965580.04"
+      },
+      {
+        "installment": 142,
+        "due_date": "2035-11-05",
+        "opening_balance": "965580.04",
+        "payment": "28444.97",
+        "principal": "21565.21",
+        "interest": "6879.76",
+        "closing_balance": "944014.83"
+      },
+      {
+        "installment": 143,
+        "due_date": "2035-12-05",
+        "opening_balance": "944014.83",
+        "payment": "28444.97",
+        "principal": "21718.86",
+        "interest": "6726.11",
+        "closing_balance": "922295.97"
+      },
+      {
+        "installment": 144,
+        "due_date": "2036-01-05",
+        "opening_balance": "922295.97",
+        "payment": "28444.97",
+        "principal": "21873.61",
+        "interest": "6571.36",
+        "closing_balance": "900422.36"
+      },
+      {
+        "installment": 145,
+        "due_date": "2036-02-05",
+        "opening_balance": "900422.36",
+        "payment": "28444.97",
+        "principal": "22029.46",
+        "interest": "6415.51",
+        "closing_balance": "878392.90"
+      },
+      {
+        "installment": 146,
+        "due_date": "2036-03-05",
+        "opening_balance": "878392.90",
+        "payment": "28444.97",
+        "principal": "22186.42",
+        "interest": "6258.55",
+        "closing_balance": "856206.48"
+      },
+      {
+        "installment": 147,
+        "due_date": "2036-04-05",
+        "opening_balance": "856206.48",
+        "payment": "28444.97",
+        "principal": "22344.50",
+        "interest": "6100.47",
+        "closing_balance": "833861.98"
+      },
+      {
+        "installment": 148,
+        "due_date": "2036-05-05",
+        "opening_balance": "833861.98",
+        "payment": "28444.97",
+        "principal": "22503.70",
+        "interest": "5941.27",
+        "closing_balance": "811358.28"
+      },
+      {
+        "installment": 149,
+        "due_date": "2036-06-05",
+        "opening_balance": "811358.28",
+        "payment": "28444.97",
+        "principal": "22664.04",
+        "interest": "5780.93",
+        "closing_balance": "788694.24"
+      },
+      {
+        "installment": 150,
+        "due_date": "2036-07-05",
+        "opening_balance": "788694.24",
+        "payment": "28444.97",
+        "principal": "22825.52",
+        "interest": "5619.45",
+        "closing_balance": "765868.72"
+      },
+      {
+        "installment": 151,
+        "due_date": "2036-08-05",
+        "opening_balance": "765868.72",
+        "payment": "28444.97",
+        "principal": "22988.16",
+        "interest": "5456.81",
+        "closing_balance": "742880.56"
+      },
+      {
+        "installment": 152,
+        "due_date": "2036-09-05",
+        "opening_balance": "742880.56",
+        "payment": "28444.97",
+        "principal": "23151.95",
+        "interest": "5293.02",
+        "closing_balance": "719728.61"
+      },
+      {
+        "installment": 153,
+        "due_date": "2036-10-05",
+        "opening_balance": "719728.61",
+        "payment": "28444.97",
+        "principal": "23316.90",
+        "interest": "5128.07",
+        "closing_balance": "696411.71"
+      },
+      {
+        "installment": 154,
+        "due_date": "2036-11-05",
+        "opening_balance": "696411.71",
+        "payment": "28444.97",
+        "principal": "23483.04",
+        "interest": "4961.93",
+        "closing_balance": "672928.67"
+      },
+      {
+        "installment": 155,
+        "due_date": "2036-12-05",
+        "opening_balance": "672928.67",
+        "payment": "28444.97",
+        "principal": "23650.35",
+        "interest": "4794.62",
+        "closing_balance": "649278.32"
+      },
+      {
+        "installment": 156,
+        "due_date": "2037-01-05",
+        "opening_balance": "649278.32",
+        "payment": "28444.97",
+        "principal": "23818.86",
+        "interest": "4626.11",
+        "closing_balance": "625459.46"
+      },
+      {
+        "installment": 157,
+        "due_date": "2037-02-05",
+        "opening_balance": "625459.46",
+        "payment": "28444.97",
+        "principal": "23988.57",
+        "interest": "4456.40",
+        "closing_balance": "601470.89"
+      },
+      {
+        "installment": 158,
+        "due_date": "2037-03-05",
+        "opening_balance": "601470.89",
+        "payment": "28444.97",
+        "principal": "24159.49",
+        "interest": "4285.48",
+        "closing_balance": "577311.40"
+      },
+      {
+        "installment": 159,
+        "due_date": "2037-04-05",
+        "opening_balance": "577311.40",
+        "payment": "28444.97",
+        "principal": "24331.63",
+        "interest": "4113.34",
+        "closing_balance": "552979.77"
+      },
+      {
+        "installment": 160,
+        "due_date": "2037-05-05",
+        "opening_balance": "552979.77",
+        "payment": "28444.97",
+        "principal": "24504.99",
+        "interest": "3939.98",
+        "closing_balance": "528474.78"
+      },
+      {
+        "installment": 161,
+        "due_date": "2037-06-05",
+        "opening_balance": "528474.78",
+        "payment": "28444.97",
+        "principal": "24679.59",
+        "interest": "3765.38",
+        "closing_balance": "503795.19"
+      },
+      {
+        "installment": 162,
+        "due_date": "2037-07-05",
+        "opening_balance": "503795.19",
+        "payment": "28444.97",
+        "principal": "24855.43",
+        "interest": "3589.54",
+        "closing_balance": "478939.76"
+      },
+      {
+        "installment": 163,
+        "due_date": "2037-08-05",
+        "opening_balance": "478939.76",
+        "payment": "28444.97",
+        "principal": "25032.52",
+        "interest": "3412.45",
+        "closing_balance": "453907.24"
+      },
+      {
+        "installment": 164,
+        "due_date": "2037-09-05",
+        "opening_balance": "453907.24",
+        "payment": "28444.97",
+        "principal": "25210.88",
+        "interest": "3234.09",
+        "closing_balance": "428696.36"
+      },
+      {
+        "installment": 165,
+        "due_date": "2037-10-05",
+        "opening_balance": "428696.36",
+        "payment": "28444.97",
+        "principal": "25390.51",
+        "interest": "3054.46",
+        "closing_balance": "403305.85"
+      },
+      {
+        "installment": 166,
+        "due_date": "2037-11-05",
+        "opening_balance": "403305.85",
+        "payment": "28444.97",
+        "principal": "25571.42",
+        "interest": "2873.55",
+        "closing_balance": "377734.43"
+      },
+      {
+        "installment": 167,
+        "due_date": "2037-12-05",
+        "opening_balance": "377734.43",
+        "payment": "28444.97",
+        "principal": "25753.61",
+        "interest": "2691.36",
+        "closing_balance": "351980.82"
+      },
+      {
+        "installment": 168,
+        "due_date": "2038-01-05",
+        "opening_balance": "351980.82",
+        "payment": "28444.97",
+        "principal": "25937.11",
+        "interest": "2507.86",
+        "closing_balance": "326043.71"
+      },
+      {
+        "installment": 169,
+        "due_date": "2038-02-05",
+        "opening_balance": "326043.71",
+        "payment": "28444.97",
+        "principal": "26121.91",
+        "interest": "2323.06",
+        "closing_balance": "299921.80"
+      },
+      {
+        "installment": 170,
+        "due_date": "2038-03-05",
+        "opening_balance": "299921.80",
+        "payment": "28444.97",
+        "principal": "26308.03",
+        "interest": "2136.94",
+        "closing_balance": "273613.77"
+      },
+      {
+        "installment": 171,
+        "due_date": "2038-04-05",
+        "opening_balance": "273613.77",
+        "payment": "28444.97",
+        "principal": "26495.47",
+        "interest": "1949.50",
+        "closing_balance": "247118.30"
+      },
+      {
+        "installment": 172,
+        "due_date": "2038-05-05",
+        "opening_balance": "247118.30",
+        "payment": "28444.97",
+        "principal": "26684.25",
+        "interest": "1760.72",
+        "closing_balance": "220434.05"
+      },
+      {
+        "installment": 173,
+        "due_date": "2038-06-05",
+        "opening_balance": "220434.05",
+        "payment": "28444.97",
+        "principal": "26874.38",
+        "interest": "1570.59",
+        "closing_balance": "193559.67"
+      },
+      {
+        "installment": 174,
+        "due_date": "2038-07-05",
+        "opening_balance": "193559.67",
+        "payment": "28444.97",
+        "principal": "27065.86",
+        "interest": "1379.11",
+        "closing_balance": "166493.81"
+      },
+      {
+        "installment": 175,
+        "due_date": "2038-08-05",
+        "opening_balance": "166493.81",
+        "payment": "28444.97",
+        "principal": "27258.70",
+        "interest": "1186.27",
+        "closing_balance": "139235.11"
+      },
+      {
+        "installment": 176,
+        "due_date": "2038-09-05",
+        "opening_balance": "139235.11",
+        "payment": "28444.97",
+        "principal": "27452.92",
+        "interest": "992.05",
+        "closing_balance": "111782.19"
+      },
+      {
+        "installment": 177,
+        "due_date": "2038-10-05",
+        "opening_balance": "111782.19",
+        "payment": "28444.97",
+        "principal": "27648.52",
+        "interest": "796.45",
+        "closing_balance": "84133.67"
+      },
+      {
+        "installment": 178,
+        "due_date": "2038-11-05",
+        "opening_balance": "84133.67",
+        "payment": "28444.97",
+        "principal": "27845.52",
+        "interest": "599.45",
+        "closing_balance": "56288.15"
+      },
+      {
+        "installment": 179,
+        "due_date": "2038-12-05",
+        "opening_balance": "56288.15",
+        "payment": "28444.97",
+        "principal": "28043.92",
+        "interest": "401.05",
+        "closing_balance": "28244.23"
+      },
+      {
+        "installment": 180,
+        "due_date": "2039-01-05",
+        "opening_balance": "28244.23",
+        "payment": "28445.47",
+        "principal": "28244.23",
+        "interest": "201.24",
+        "closing_balance": "0.00"
+      }
+    ]
+  },
+  "contributions": [
+    {
+      "amount": "50000.00",
+      "contribution_date": "2024-04-05",
+      "reference_code": "PPFTX001",
+      "id": 1,
+      "ppf_account_id": 1
+    },
+    {
+      "amount": "25000.00",
+      "contribution_date": "2024-10-05",
+      "reference_code": "PPFTX002",
+      "id": 2,
+      "ppf_account_id": 1
+    }
+  ],
+  "interest": {
+    "account_id": 1,
+    "financial_year": 2024,
+    "interest_rate": "7.100",
+    "estimated_interest": "6212.50",
+    "is_estimate": true,
+    "basis": "April-March, balances at close of fifth day, stored rate held constant. Opening balance plus recorded contributions only; historical interest credits and rate changes are unavailable. Not posted to balance.",
+    "months": [
+      {
+        "month": "2024-04-01",
+        "eligible_balance": "75000.00",
+        "estimated_interest": "443.75"
+      },
+      {
+        "month": "2024-05-01",
+        "eligible_balance": "75000.00",
+        "estimated_interest": "443.75"
+      },
+      {
+        "month": "2024-06-01",
+        "eligible_balance": "75000.00",
+        "estimated_interest": "443.75"
+      },
+      {
+        "month": "2024-07-01",
+        "eligible_balance": "75000.00",
+        "estimated_interest": "443.75"
+      },
+      {
+        "month": "2024-08-01",
+        "eligible_balance": "75000.00",
+        "estimated_interest": "443.75"
+      },
+      {
+        "month": "2024-09-01",
+        "eligible_balance": "75000.00",
+        "estimated_interest": "443.75"
+      },
+      {
+        "month": "2024-10-01",
+        "eligible_balance": "100000.00",
+        "estimated_interest": "591.67"
+      },
+      {
+        "month": "2024-11-01",
+        "eligible_balance": "100000.00",
+        "estimated_interest": "591.67"
+      },
+      {
+        "month": "2024-12-01",
+        "eligible_balance": "100000.00",
+        "estimated_interest": "591.67"
+      },
+      {
+        "month": "2025-01-01",
+        "eligible_balance": "100000.00",
+        "estimated_interest": "591.67"
+      },
+      {
+        "month": "2025-02-01",
+        "eligible_balance": "100000.00",
+        "estimated_interest": "591.67"
+      },
+      {
+        "month": "2025-03-01",
+        "eligible_balance": "100000.00",
+        "estimated_interest": "591.67"
+      }
+    ]
+  },
+  "monthly": {
+    "date_from": "2024-01-01",
+    "date_to": "2024-10-31",
+    "currency": "INR",
+    "months": [
+      {
+        "income": "0.00",
+        "expenses": "0.00",
+        "investment_outflow": "0.00",
+        "loan_payments": "0.00",
+        "transfers": "0.00",
+        "total_outflow": "0.00",
+        "net_cash_flow": "0.00",
+        "savings_rate_percent": null,
+        "transaction_count": 0,
+        "month": "2024-01-01"
+      },
+      {
+        "income": "0.00",
+        "expenses": "0.00",
+        "investment_outflow": "0.00",
+        "loan_payments": "0.00",
+        "transfers": "0.00",
+        "total_outflow": "0.00",
+        "net_cash_flow": "0.00",
+        "savings_rate_percent": null,
+        "transaction_count": 0,
+        "month": "2024-02-01"
+      },
+      {
+        "income": "0.00",
+        "expenses": "0.00",
+        "investment_outflow": "0.00",
+        "loan_payments": "0.00",
+        "transfers": "0.00",
+        "total_outflow": "0.00",
+        "net_cash_flow": "0.00",
+        "savings_rate_percent": null,
+        "transaction_count": 0,
+        "month": "2024-03-01"
+      },
+      {
+        "income": "0.00",
+        "expenses": "0.00",
+        "investment_outflow": "0.00",
+        "loan_payments": "0.00",
+        "transfers": "0.00",
+        "total_outflow": "0.00",
+        "net_cash_flow": "0.00",
+        "savings_rate_percent": null,
+        "transaction_count": 0,
+        "month": "2024-04-01"
+      },
+      {
+        "income": "0.00",
+        "expenses": "0.00",
+        "investment_outflow": "0.00",
+        "loan_payments": "0.00",
+        "transfers": "0.00",
+        "total_outflow": "0.00",
+        "net_cash_flow": "0.00",
+        "savings_rate_percent": null,
+        "transaction_count": 0,
+        "month": "2024-05-01"
+      },
+      {
+        "income": "0.00",
+        "expenses": "0.00",
+        "investment_outflow": "0.00",
+        "loan_payments": "0.00",
+        "transfers": "0.00",
+        "total_outflow": "0.00",
+        "net_cash_flow": "0.00",
+        "savings_rate_percent": null,
+        "transaction_count": 0,
+        "month": "2024-06-01"
+      },
+      {
+        "income": "0.00",
+        "expenses": "0.00",
+        "investment_outflow": "0.00",
+        "loan_payments": "0.00",
+        "transfers": "0.00",
+        "total_outflow": "0.00",
+        "net_cash_flow": "0.00",
+        "savings_rate_percent": null,
+        "transaction_count": 0,
+        "month": "2024-07-01"
+      },
+      {
+        "income": "0.00",
+        "expenses": "0.00",
+        "investment_outflow": "0.00",
+        "loan_payments": "0.00",
+        "transfers": "0.00",
+        "total_outflow": "0.00",
+        "net_cash_flow": "0.00",
+        "savings_rate_percent": null,
+        "transaction_count": 0,
+        "month": "2024-08-01"
+      },
+      {
+        "income": "0.00",
+        "expenses": "0.00",
+        "investment_outflow": "0.00",
+        "loan_payments": "0.00",
+        "transfers": "0.00",
+        "total_outflow": "0.00",
+        "net_cash_flow": "0.00",
+        "savings_rate_percent": null,
+        "transaction_count": 0,
+        "month": "2024-09-01"
+      },
+      {
+        "income": "120000.00",
+        "expenses": "45000.00",
+        "investment_outflow": "10000.00",
+        "loan_payments": "28500.00",
+        "transfers": "0.00",
+        "total_outflow": "83500.00",
+        "net_cash_flow": "36500.00",
+        "savings_rate_percent": "62.50",
+        "transaction_count": 8,
+        "month": "2024-10-01"
+      }
+    ]
+  },
+  "categoryReport": {
+    "date_from": "2024-10-01",
+    "date_to": "2024-10-31",
+    "currency": "INR",
+    "categories": [
+      {
+        "category_id": 1,
+        "category_name": "Salary",
+        "transaction_type": "income",
+        "amount": "120000.00",
+        "transaction_count": 1,
+        "share_of_type_percent": "100.00"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Food & Dining",
+        "transaction_type": "expense",
+        "amount": "14200.00",
+        "transaction_count": 1,
+        "share_of_type_percent": "31.56"
+      },
+      {
+        "category_id": 3,
+        "category_name": "Shopping",
+        "transaction_type": "expense",
+        "amount": "8500.00",
+        "transaction_count": 1,
+        "share_of_type_percent": "18.89"
+      },
+      {
+        "category_id": 4,
+        "category_name": "Bills & Utilities",
+        "transaction_type": "expense",
+        "amount": "12100.00",
+        "transaction_count": 1,
+        "share_of_type_percent": "26.89"
+      },
+      {
+        "category_id": 5,
+        "category_name": "Transport & Fuel",
+        "transaction_type": "expense",
+        "amount": "4800.00",
+        "transaction_count": 1,
+        "share_of_type_percent": "10.67"
+      },
+      {
+        "category_id": 6,
+        "category_name": "Entertainment",
+        "transaction_type": "expense",
+        "amount": "5400.00",
+        "transaction_count": 1,
+        "share_of_type_percent": "12.00"
+      },
+      {
+        "category_id": 7,
+        "category_name": "Loan EMI",
+        "transaction_type": "loan_payment",
+        "amount": "28500.00",
+        "transaction_count": 1,
+        "share_of_type_percent": "100.00"
+      },
+      {
+        "category_id": 8,
+        "category_name": "Investment",
+        "transaction_type": "investment",
+        "amount": "10000.00",
+        "transaction_count": 1,
+        "share_of_type_percent": "100.00"
+      }
+    ]
+  },
+  "summary": {
+    "date_from": "2024-10-01",
+    "date_to": "2024-10-31",
+    "currency": "INR",
+    "totals": {
+      "income": "120000.00",
+      "expenses": "45000.00",
+      "investment_outflow": "10000.00",
+      "loan_payments": "28500.00",
+      "transfers": "0.00",
+      "total_outflow": "83500.00",
+      "net_cash_flow": "36500.00",
+      "savings_rate_percent": "62.50",
+      "transaction_count": 8
+    },
+    "previous_period": {
+      "income": "0.00",
+      "expenses": "0.00",
+      "investment_outflow": "0.00",
+      "loan_payments": "0.00",
+      "transfers": "0.00",
+      "total_outflow": "0.00",
+      "net_cash_flow": "0.00",
+      "savings_rate_percent": null,
+      "transaction_count": 0
+    },
+    "income_change_percent": null,
+    "expense_change_percent": null,
+    "accounting_basis": "Positive amounts classified by transaction_type. Cash outflow = expense + investment + loan_payment; transfers excluded from net cash flow. Portfolio snapshots, budget limits, PPF contributions, and scheduled payments are not added to ledger cash flow."
+  },
+  "dashboard": {
+    "month": "2024-10-01",
+    "as_of": "2024-11-01",
+    "currency": "INR",
+    "income": "120000.00",
+    "expenses": "45000.00",
+    "balance": "36500.00",
+    "balance_basis": "Selected month's recorded net cash flow; no opening bank balance exists. Assets and loan balances are current snapshots, not historical valuations.",
+    "cash_flow": {
+      "income": "120000.00",
+      "expenses": "45000.00",
+      "investment_outflow": "10000.00",
+      "loan_payments": "28500.00",
+      "transfers": "0.00",
+      "total_outflow": "83500.00",
+      "net_cash_flow": "36500.00",
+      "savings_rate_percent": "62.50",
+      "transaction_count": 8
+    },
+    "investments": {
+      "invested_value": "780000.00",
+      "current_value": "970000.00",
+      "gain_loss": "190000.00",
+      "gain_loss_percent": "24.36",
+      "fixed_deposit_estimated_value": "223738.58",
+      "ppf_reported_balance": "100000.00",
+      "total_asset_value": "1293738.58"
+    },
+    "outstanding_loans": "3420000.00",
+    "budget_usage": {
+      "limit_amount": "59500.00",
+      "spent_amount": "45000.00",
+      "remaining_amount": "14500.00",
+      "usage_percent": "75.63",
+      "budgets": [
+        {
+          "id": 1,
+          "user_id": 1,
+          "category_id": 2,
+          "budget_month": "2024-10-01",
+          "limit_amount": "18000.00",
+          "spent_amount": "14200.00",
+          "remaining_amount": "3800.00",
+          "usage_percent": "78.89"
+        },
+        {
+          "id": 2,
+          "user_id": 1,
+          "category_id": 3,
+          "budget_month": "2024-10-01",
+          "limit_amount": "15000.00",
+          "spent_amount": "8500.00",
+          "remaining_amount": "6500.00",
+          "usage_percent": "56.67"
+        },
+        {
+          "id": 3,
+          "user_id": 1,
+          "category_id": 4,
+          "budget_month": "2024-10-01",
+          "limit_amount": "12500.00",
+          "spent_amount": "12100.00",
+          "remaining_amount": "400.00",
+          "usage_percent": "96.80"
+        },
+        {
+          "id": 4,
+          "user_id": 1,
+          "category_id": 5,
+          "budget_month": "2024-10-01",
+          "limit_amount": "8000.00",
+          "spent_amount": "4800.00",
+          "remaining_amount": "3200.00",
+          "usage_percent": "60.00"
+        },
+        {
+          "id": 5,
+          "user_id": 1,
+          "category_id": 6,
+          "budget_month": "2024-10-01",
+          "limit_amount": "6000.00",
+          "spent_amount": "5400.00",
+          "remaining_amount": "600.00",
+          "usage_percent": "90.00"
+        }
+      ]
+    },
+    "upcoming_obligations": [
+      {
+        "source": "loan",
+        "source_id": 1,
+        "title": "HDFC Home Loan",
+        "due_date": "2024-11-05",
+        "amount": "28500.00",
+        "direction": "outflow",
+        "overdue": false
+      },
+      {
+        "source": "sip",
+        "source_id": 2,
+        "title": "Nifty 50 Index Fund",
+        "due_date": "2024-11-10",
+        "amount": "10000.00",
+        "direction": "outflow",
+        "overdue": false
+      },
+      {
+        "source": "loan",
+        "source_id": 2,
+        "title": "ICICI Car Loan",
+        "due_date": "2024-11-12",
+        "amount": "14000.00",
+        "direction": "outflow",
+        "overdue": false
+      },
+      {
+        "source": "fd_maturity",
+        "source_id": 1,
+        "title": "Axis Bank",
+        "due_date": "2024-11-15",
+        "amount": "124629.15",
+        "direction": "inflow",
+        "overdue": false
+      },
+      {
+        "source": "reminder",
+        "source_id": 1,
+        "title": "Electricity Bill",
+        "due_date": "2024-11-20",
+        "amount": "2340.00",
+        "direction": "outflow",
+        "overdue": false
+      },
+      {
+        "source": "reminder",
+        "source_id": 2,
+        "title": "Internet Bill",
+        "due_date": "2024-11-25",
+        "amount": "1899.00",
+        "direction": "outflow",
+        "overdue": false
+      }
+    ],
+    "recent_transactions": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "description": "Monthly Salary",
+        "amount": "120000.00",
+        "transaction_type": "income",
+        "transaction_date": "2024-10-31",
+        "category_id": 1,
+        "reference_code": "TX001",
+        "payment_method": "HDFC Bank",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 2,
+        "user_id": 1,
+        "description": "Groceries & Dining",
+        "amount": "14200.00",
+        "transaction_type": "expense",
+        "transaction_date": "2024-10-27",
+        "category_id": 2,
+        "reference_code": "TX002",
+        "payment_method": "ICICI Card",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 3,
+        "user_id": 1,
+        "description": "Shopping & Retail",
+        "amount": "8500.00",
+        "transaction_type": "expense",
+        "transaction_date": "2024-10-26",
+        "category_id": 3,
+        "reference_code": "TX003",
+        "payment_method": "UPI",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 8,
+        "user_id": 1,
+        "description": "Nifty 50 SIP",
+        "amount": "10000.00",
+        "transaction_type": "investment",
+        "transaction_date": "2024-10-25",
+        "category_id": 8,
+        "reference_code": "TX008",
+        "payment_method": "UPI",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 7,
+        "user_id": 1,
+        "description": "Home Loan EMI",
+        "amount": "28500.00",
+        "transaction_type": "loan_payment",
+        "transaction_date": "2024-10-24",
+        "category_id": 7,
+        "reference_code": "TX007",
+        "payment_method": "Auto Debit",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 4,
+        "user_id": 1,
+        "description": "Electricity & Internet",
+        "amount": "12100.00",
+        "transaction_type": "expense",
+        "transaction_date": "2024-10-20",
+        "category_id": 4,
+        "reference_code": "TX004",
+        "payment_method": "UPI",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 5,
+        "user_id": 1,
+        "description": "Petrol & Transport",
+        "amount": "4800.00",
+        "transaction_type": "expense",
+        "transaction_date": "2024-10-18",
+        "category_id": 5,
+        "reference_code": "TX005",
+        "payment_method": "Debit Card",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      },
+      {
+        "id": 6,
+        "user_id": 1,
+        "description": "Movies & Subscriptions",
+        "amount": "5400.00",
+        "transaction_type": "expense",
+        "transaction_date": "2024-10-16",
+        "category_id": 6,
+        "reference_code": "TX006",
+        "payment_method": "ICICI Card",
+        "notes": null,
+        "created_at": "2026-11-15T22:11:56.928673Z"
+      }
+    ]
+  }
+}

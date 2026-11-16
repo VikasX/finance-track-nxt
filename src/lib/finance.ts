@@ -1,6 +1,3 @@
-import type { FinanceState, Transaction } from "@/types/finance";
-
-export const DEMO_MONTH = "2024-10";
 export function money(value: number, currency = "INR", decimals = 0) {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -29,25 +26,6 @@ export function uid() {
 }
 export function sum<T>(items: T[], fn: (item: T) => number) {
   return items.reduce((total, item) => total + fn(item), 0);
-}
-export function monthlyTransactions(state: FinanceState, month: string) {
-  return state.transactions.filter((t) => t.date.startsWith(month));
-}
-export function cashTotals(transactions: Transaction[]) {
-  const income = sum(
-    transactions.filter((t) => t.kind === "income"),
-    (t) => t.amount,
-  );
-  const expense = sum(
-    transactions.filter((t) => t.kind === "expense"),
-    (t) => t.amount,
-  );
-  return {
-    income,
-    expense,
-    net: income - expense,
-    savingsRate: income ? ((income - expense) / income) * 100 : 0,
-  };
 }
 export function calculateFD(
   principal: number,

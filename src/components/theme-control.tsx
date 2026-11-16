@@ -1,8 +1,15 @@
 "use client";
+import { useSyncExternalStore } from "react";
 import { useTheme, type ThemeMode } from "./theme-provider";
 import { Icon } from "./ui/icon";
-export function ThemeControl() {
+const subscribeHydration = () => () => {};
+export function ThemeControl({ label = "Color theme" }: { label?: string }) {
   const { mode, setMode } = useTheme();
+  const ready = useSyncExternalStore(
+    subscribeHydration,
+    () => true,
+    () => false,
+  );
   return (
     <label className="theme-control" title="Color theme">
       <Icon
@@ -10,7 +17,8 @@ export function ThemeControl() {
         size={17}
       />
       <select
-        aria-label="Color theme"
+        aria-label={label}
+        disabled={!ready}
         value={mode}
         onChange={(event) => setMode(event.target.value as ThemeMode)}
       >

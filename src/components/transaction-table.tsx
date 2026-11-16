@@ -1,61 +1,69 @@
 "use client";
-import { useState } from "react";
-import type { ReactNode } from "react";
-import { dateLabel, money } from "@/lib/finance";
-import type { Transaction } from "@/types/finance";
-import { useFinance } from "./finance-provider";
+import { useState, type ReactNode } from "react";
+import type { CategoryRead, TransactionRead } from "@/types/api";
+import { mutate } from "@/lib/api-cache";
+import { useAmount } from "./use-amount";
+import { dateLabel } from "@/lib/finance";
 import { TransactionEditor } from "./transaction-editor";
 import { DataTable, type Column } from "./ui/data-table";
 import { Badge, ConfirmDelete } from "./ui/primitives";
 import { Icon } from "./ui/icon";
 export function TransactionTable({
   rows,
+  categories = [],
   toolbar,
   compact = false,
+  pagination,
+  onEdit,
+  onDelete,
 }: {
-  rows: Transaction[];
+  rows: TransactionRead[];
+  categories?: CategoryRead[];
   toolbar?: ReactNode;
   compact?: boolean;
+  onEdit?: (transaction: TransactionRead) => void;
+  onDelete?: (transaction: TransactionRead) => void;
+  pagination?: {
+    page: number;
+    pageSize: number;
+    total: number;
+    onChange: (page: number, size: number) => void;
+  };
 }) {
-  const { remove } = useFinance();
-  const [editing, setEditing] = useState<Transaction>();
-  const [deleting, setDeleting] = useState<string>();
-  const columns: Column<Transaction>[] = [
+  const amount = useAmount();
+  const [editing, setEditing] = useState<TransactionRead>();
+  const [deleting, setDeleting] = useState<TransactionRead>();
+  const columns: Column<TransactionRead>[] = [
     {
       key: "date",
       title: "Date & Time",
-      sort: (t) => t.date,
-      render: (t) => (
+      sort: (r) => r.transaction_date,
+      render: (r) => (
         <span className="whitespace-nowrap text-xs">
-          {dateLabel(t.date)}
-          <small className="block muted mt-1">09:15 AM</small>
+          {dateLabel(r.transaction_date)}
         </span>
       ),
     },
     {
-      key: "description",
+      key: "entity",
       title: "Description / Entity",
-      sort: (t) => t.name,
-      render: (t) => (
+      sort: (r) => r.description,
+      render: (r) => (
         <div className="entity">
           <span className="entity-icon">
             <Icon
               name={
-                t.kind === "income"
+                r.transaction_type === "income"
                   ? "corporate_fare"
-                  : t.kind === "investment"
+                  : r.transaction_type === "investment"
                     ? "trending_up"
-                    : t.kind === "loan"
-                      ? "home_work"
-                      : t.category.includes("Food")
-                        ? "shopping_cart"
-                        : "receipt_long"
+                    : "receipt_long"
               }
             />
           </span>
           <div>
-            <strong>{t.name}</strong>
-            <small>{t.description}</small>
+            <strong>{r.description}</strong>
+            <small>{r.notes ?? r.reference_code ?? ""}</small>
           </div>
         </div>
       ),
@@ -63,49 +71,53 @@ export function TransactionTable({
     {
       key: "category",
       title: "Category",
-      sort: (t) => t.category,
-      render: (t) => (
-        <Badge tone={t.kind === "income" ? "green" : "gray"}>
-          {t.category}
+      render: (r) => (
+        <Badge tone={r.transaction_type === "income" ? "green" : "gray"}>
+          {categories.find((c) => c.id === r.category_id)?.name ??
+            (r.category_id == null
+              ? "Uncategorized"
+              : `Category ${r.category_id}`)}
         </Badge>
       ),
     },
     {
-      key: "channel",
+      key: "payment",
       title: "Payment Channel",
-      sort: (t) => t.channel,
-      render: (t) => (
-        <span className="text-xs muted whitespace-nowrap">{t.channel}</span>
+      sort: (r) => r.payment_method ?? "",
+      render: (r) => (
+        <span className="muted whitespace-nowrap">
+          {r.payment_method ?? "—"}
+        </span>
       ),
     },
-    ...(!compact
-      ? [
-          {
-            key: "kind",
-            title: "Ledger Type",
-            render: (t: Transaction) => (
-              <Badge tone={t.kind === "income" ? "green" : "red"}>
-                {t.kind === "income"
-                  ? "CREDIT"
-                  : t.kind === "expense"
-                    ? "DEBIT"
-                    : "TRANSFER"}
-              </Badge>
-            ),
-          },
-        ]
-      : []),
+    {
+      key: "kind",
+      title: "Ledger Type",
+      render: (r) => (
+        <Badge
+          tone={
+            r.transaction_type === "income"
+              ? "green"
+              : r.transaction_type === "expense"
+                ? "red"
+                : "gray"
+          }
+        >
+          {r.transaction_type.replaceAll("_", " ")}
+        </Badge>
+      ),
+    },
     {
       key: "amount",
       title: "Amount (INR)",
       align: "right",
-      sort: (t) => t.amount * (t.kind === "income" ? 1 : -1),
-      render: (t) => (
+      sort: (r) => Number(r.amount),
+      render: (r) => (
         <strong
-          className={`font-mono whitespace-nowrap ${t.kind === "income" ? "positive" : ""}`}
+          className={`font-mono whitespace-nowrap ${r.transaction_type === "income" ? "positive" : ""}`}
         >
-          {t.kind === "income" ? "+" : "−"}
-          {money(t.amount, "INR", 2)}
+          {r.transaction_type === "income" ? "+" : "−"}
+          {amount(r.amount, "INR", 2)}
         </strong>
       ),
     },
@@ -114,19 +126,19 @@ export function TransactionTable({
           {
             key: "actions",
             title: "Actions",
-            render: (t: Transaction) => (
+            render: (r: TransactionRead) => (
               <div className="flex">
                 <button
                   className="icon-button"
-                  aria-label={`Edit ${t.name}`}
-                  onClick={() => setEditing(t)}
+                  aria-label={`Edit ${r.description}`}
+                  onClick={() => (onEdit ? onEdit(r) : setEditing(r))}
                 >
                   <Icon name="edit" size={15} />
                 </button>
                 <button
                   className="icon-button"
-                  aria-label={`Delete ${t.name}`}
-                  onClick={() => setDeleting(t.id)}
+                  aria-label={`Delete ${r.description}`}
+                  onClick={() => (onDelete ? onDelete(r) : setDeleting(r))}
                 >
                   <Icon name="delete" size={15} />
                 </button>
@@ -141,9 +153,10 @@ export function TransactionTable({
       <DataTable
         rows={rows}
         columns={columns}
-        label="transactions"
-        pageSize={compact ? 6 : 8}
         toolbar={toolbar}
+        pageSize={compact ? 6 : 8}
+        label="transactions"
+        pagination={pagination}
       />
       {editing && (
         <TransactionEditor
@@ -153,10 +166,12 @@ export function TransactionTable({
         />
       )}
       <ConfirmDelete
+        key={deleting?.id ?? "none"}
         open={Boolean(deleting)}
         onClose={() => setDeleting(undefined)}
-        onConfirm={() => {
-          if (deleting) remove("transactions", deleting);
+        onConfirm={async () => {
+          if (deleting)
+            await mutate(`/api/transactions/${deleting.id}`, "DELETE");
         }}
       />
     </>

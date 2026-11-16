@@ -9,21 +9,33 @@ export interface Column<T> {
   sort?: (row: T) => string | number;
   align?: "right";
 }
-export function DataTable<T extends { id: string }>({
+export function DataTable<T extends { id: string | number }>({
   rows,
   columns,
   pageSize = 8,
   label = "records",
   toolbar,
+  pagination,
 }: {
   rows: T[];
   columns: Column<T>[];
   pageSize?: number;
   label?: string;
   toolbar?: ReactNode;
+  pagination?: {
+    page: number;
+    pageSize: number;
+    total: number;
+    onChange: (page: number, size: number) => void;
+  };
 }) {
-  const [page, setPage] = useState(1);
-  const [size, setSize] = useState(pageSize);
+  const [localPage, setLocalPage] = useState(1);
+  const [localSize, setLocalSize] = useState(pageSize);
+  const page = pagination?.page ?? localPage;
+  const size = pagination?.pageSize ?? localSize;
+  const total = pagination?.total ?? rows.length;
+  const setPage = (page: number) =>
+    pagination ? pagination.onChange(page, size) : setLocalPage(page);
   const [sort, setSort] = useState({ key: "", direction: 1 });
   const sorted = useMemo(() => {
     const column = columns.find((column) => column.key === sort.key);
@@ -39,7 +51,7 @@ export function DataTable<T extends { id: string }>({
       );
     });
   }, [rows, columns, sort]);
-  const pages = Math.max(1, Math.ceil(sorted.length / size));
+  const pages = Math.max(1, Math.ceil(total / size));
   const currentPage = Math.min(page, pages);
   const offset = (currentPage - 1) * size;
   return (
@@ -90,18 +102,20 @@ export function DataTable<T extends { id: string }>({
             </tr>
           </thead>
           <tbody>
-            {sorted.slice(offset, offset + size).map((row) => (
-              <tr key={row.id}>
-                {columns.map((column) => (
-                  <td
-                    key={column.key}
-                    className={column.align === "right" ? "text-right" : ""}
-                  >
-                    {column.render(row)}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {(pagination ? sorted : sorted.slice(offset, offset + size)).map(
+              (row) => (
+                <tr key={row.id}>
+                  {columns.map((column) => (
+                    <td
+                      key={column.key}
+                      className={column.align === "right" ? "text-right" : ""}
+                    >
+                      {column.render(row)}
+                    </td>
+                  ))}
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
         {rows.length === 0 && <EmptyState />}
@@ -111,9 +125,9 @@ export function DataTable<T extends { id: string }>({
           Showing{" "}
           <strong>
             {rows.length ? offset + 1 : 0}–
-            {Math.min(offset + size, rows.length)}
+            {rows.length ? Math.min(offset + size, total) : 0}
           </strong>{" "}
-          of <strong>{rows.length}</strong> {label}
+          of <strong>{total}</strong> {label}
         </span>
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-2">
@@ -122,8 +136,12 @@ export function DataTable<T extends { id: string }>({
               aria-label="Rows per page"
               value={size}
               onChange={(event) => {
-                setSize(Number(event.target.value));
-                setPage(1);
+                if (pagination)
+                  pagination.onChange(1, Number(event.target.value));
+                else {
+                  setLocalSize(Number(event.target.value));
+                  setLocalPage(1);
+                }
               }}
             >
               {Array.from(new Set([pageSize, 8, 20, 50]))

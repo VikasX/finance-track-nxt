@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import type { CategoryRead, TransactionRead } from "@/types/api";
+import { useApi } from "@/lib/api-cache";
 import { useFinance } from "./finance-provider";
-import { Modal, RecordForm, Tabs, type FormField } from "./ui/primitives";
-import type { Transaction, TransactionKind } from "@/types/finance";
-import { uid } from "@/lib/finance";
+import { ResourceEditor } from "./resource-editor";
+import { ApiBoundary } from "./ui/api-boundary";
+import { Modal } from "./ui/primitives";
 export function TransactionEditor({
   open,
   onClose,
@@ -11,106 +12,36 @@ export function TransactionEditor({
 }: {
   open: boolean;
   onClose: () => void;
-  transaction?: Transaction;
+  transaction?: TransactionRead;
 }) {
-  const { state, update, notify, month } = useFinance();
-  const [kind, setKind] = useState<TransactionKind>(
-    transaction?.kind ?? "expense",
+  const { month } = useFinance();
+  const categories = useApi<CategoryRead[]>(
+    open ? "all:/api/categories" : null,
   );
-  const fields: FormField[] = [
-    {
-      name: "amount",
-      label: "Amount (₹)",
-      type: "number",
-      min: 0.01,
-      value: transaction?.amount,
-      placeholder: "0.00",
-    },
-    {
-      name: "category",
-      label: "Category",
-      type: "select",
-      options: state.categories,
-      value:
-        transaction?.category ??
-        (kind === "income" ? "Salary" : "Food & Dining"),
-    },
-    {
-      name: "channel",
-      label: "Account / Payment Channel",
-      type: "select",
-      options: [
-        "HDFC Salary Account",
-        "ICICI Sapphiro",
-        "UPI / GPay",
-        "ACH Auto-Debit",
-        "Net Banking",
-        "Cash",
-      ],
-      value: transaction?.channel,
-    },
-    {
-      name: "date",
-      label: "Date & Execution Timestamp",
-      type: "date",
-      value: transaction?.date ?? `${month}-22`,
-    },
-    { name: "name", label: "Merchant / Reference", value: transaction?.name },
-    {
-      name: "description",
-      label: "Description",
-      value: transaction?.description,
-      required: false,
-    },
-  ];
+  if (!open) return null;
+  if (!categories.data)
+    return (
+      <Modal
+        open
+        onClose={onClose}
+        title={transaction ? "Edit Transaction" : "Quick Add Transaction"}
+      >
+        <ApiBoundary query={categories}>{null}</ApiBoundary>
+      </Modal>
+    );
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title={transaction ? "Edit Transaction" : "Quick Add Transaction"}
-      subtitle="Log debit or credit with instantaneous ledger balance sync"
-    >
-      <div className="mb-5">
-        <label className="field-label">Transaction Nature</label>
-        <Tabs
-          value={kind}
-          onChange={(value) => setKind(value as TransactionKind)}
-          items={[
-            { label: "Income (+)", value: "income" },
-            { label: "Expense (−)", value: "expense" },
-            { label: "Investment", value: "investment" },
-            { label: "Loan / EMI", value: "loan" },
-          ]}
-        />
-      </div>
-      <RecordForm
-        key={`${transaction?.id ?? "new"}-${kind}`}
-        fields={fields}
-        onCancel={onClose}
-        submit="Save Transaction"
-        onSave={(values) => {
-          const record: Transaction = {
-            id: transaction?.id ?? uid(),
-            name: values.name,
-            description: values.description,
-            amount: Number(values.amount),
-            kind,
-            category: values.category,
-            channel: values.channel,
-            date: values.date,
-          };
-          update((current) => ({
-            ...current,
-            transactions: transaction
-              ? current.transactions.map((item) =>
-                  item.id === transaction.id ? record : item,
-                )
-              : [...current.transactions, record],
-          }));
-          notify(transaction ? "Transaction updated." : "Transaction added.");
-          onClose();
+    <ApiBoundary query={categories}>
+      <ResourceEditor
+        path="/api/transactions"
+        record={transaction}
+        title={transaction ? "Edit Transaction" : "Quick Add Transaction"}
+        onClose={onClose}
+        categories={categories.data}
+        defaults={{
+          transaction_type: "expense",
+          transaction_date: `${month}-22`,
         }}
       />
-    </Modal>
+    </ApiBoundary>
   );
 }

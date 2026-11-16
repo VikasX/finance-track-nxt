@@ -1,331 +1,214 @@
 "use client";
+import { useAmount } from "../use-amount";
+
 import { useState } from "react";
+import type { BudgetRead, CategoryRead } from "@/types/api";
+import { mutate, useApi } from "@/lib/api-cache";
+import { decimal, percent, total } from "@/lib/api-format";
 import { useFinance } from "../finance-provider";
-import { selectSummary } from "@/lib/selectors";
-import { money, uid } from "@/lib/finance";
-import type { Budget } from "@/types/finance";
+import { ResourceEditor } from "../resource-editor";
+import { ApiBoundary } from "../ui/api-boundary";
 import {
   Badge,
   Button,
   Card,
+  ConfirmDelete,
+  EmptyState,
   Metric,
-  Modal,
   PageHeading,
   Progress,
-  RecordForm,
   Tabs,
 } from "../ui/primitives";
 import { Icon } from "../ui/icon";
 export function Budgets() {
-  const { state, month, update, notify } = useFinance();
-  const summary = selectSummary(state, month);
+  const amount = useAmount();
+  const { month } = useFinance();
+  const query = useApi<BudgetRead[]>(`all:/api/budgets?month=${month}-01`);
+  const categories = useApi<CategoryRead[]>("all:/api/categories");
   const [filter, setFilter] = useState("All");
-  const [editing, setEditing] = useState<Budget | null | undefined>();
-  const remaining = summary.budgetLimit - summary.budgetSpent;
-  const alerts = summary.budgets.filter(
-    (b) => (b.spent / b.limit) * 100 >= b.threshold,
-  );
-  const visible = filter === "All" ? summary.budgets : alerts;
+  const [editor, setEditor] = useState<BudgetRead | null | undefined>();
+  const [deleting, setDeleting] = useState<BudgetRead>();
+  const rows = query.data ?? [];
+  const alerts = rows.filter((b) => decimal(b.usage_percent) >= 90);
+  const name = (b: BudgetRead) =>
+    categories.data?.find((c) => c.id === b.category_id)?.name ??
+    `Category ${b.category_id}`;
   return (
     <div className="page-stack">
       <PageHeading
         title="Monthly Budgets"
         eyebrow="Financial Planning"
-        badge="Cycle Live"
+        badge="API Connected"
         description="Plan category thresholds, monitor pacing, and prevent expense overflows"
         actions={
           <Button
             variant="primary"
             icon="add_circle"
-            onClick={() => setEditing(null)}
+            onClick={() => setEditor(null)}
           >
             Create New Budget
           </Button>
         }
       />
-      <div className="metric-grid transactions-metrics">
-        <Metric
-          label="Total Monthly Budget"
-          value={money(summary.budgetLimit)}
-          icon="account_balance_wallet"
-          detail={`Aggregated across ${summary.budgets.length} targets`}
-        />
-        <Metric
-          label="Total Spent"
-          value={money(summary.budgetSpent)}
-          icon="credit_card"
-          detail={
-            <Badge>
-              {summary.budgetLimit
-                ? ((summary.budgetSpent / summary.budgetLimit) * 100).toFixed(1)
-                : 0}
-              %
-            </Badge>
-          }
-          footer={`Avg. ${money(summary.budgetSpent / 20)} / day elapsed`}
-        />
-        <Metric
-          label="Remaining to Spend"
-          value={money(remaining)}
-          icon="savings"
-          detail="11 days left in this billing cycle"
-          footer={`Recommended Daily Cap: ${money(remaining / 11)}`}
-          tone="positive"
-        />
-      </div>
-      <Card className="!py-5">
-        <div className="flex justify-between gap-4 mb-4 text-xs flex-wrap">
-          <span className="font-semibold">
-            Month Pacing Index{" "}
-            <span className="muted font-normal">
-              (64.5% of days passed vs{" "}
-              {summary.budgetLimit
-                ? ((summary.budgetSpent / summary.budgetLimit) * 100).toFixed(1)
-                : 0}
-              % spent)
-            </span>
-          </span>
-          <span className="muted">
-            Actual Spend <span className="text-violet-600 ml-2">●</span>{" "}
-            <span className="ml-4">Expected Benchmark (64.5%)</span>
-          </span>
-        </div>
-        <div className="relative">
-          <Progress
-            value={
-              summary.budgetLimit
-                ? (summary.budgetSpent / summary.budgetLimit) * 100
-                : 0
-            }
+      <ApiBoundary query={query}>
+        <div className="metric-grid transactions-metrics">
+          <Metric
+            label="Total Monthly Budget"
+            value={amount(total(rows.map((b) => b.limit_amount)))}
+            icon="account_balance_wallet"
+            detail={`Across ${rows.length} envelopes`}
           />
-          <span
-            className="absolute w-px h-5 bg-slate-500 -top-1"
-            style={{ left: "64.5%" }}
+          <Metric
+            label="Total Spent"
+            value={amount(total(rows.map((b) => b.spent_amount)))}
+            icon="credit_card"
+            detail="Actual category expenses for selected month"
+          />
+          <Metric
+            label="Remaining to Spend"
+            value={amount(total(rows.map((b) => b.remaining_amount)))}
+            icon="savings"
+            tone="positive"
+            detail="Budget limits less recorded spending"
           />
         </div>
-      </Card>
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h2>Category Allocations</h2>
-          <p className="muted text-xs mt-1">
-            Live telemetry by spending envelope
-          </p>
+        <div className="flex justify-between items-center gap-3">
+          <div>
+            <h2>Category Allocations</h2>
+            <p className="muted text-xs">
+              Spending and utilization calculated by the API
+            </p>
+          </div>
+          <Tabs
+            value={filter}
+            onChange={setFilter}
+            items={[
+              { value: "All", label: `All (${rows.length})` },
+              { value: "Alerts", label: `Alerts (${alerts.length})` },
+            ]}
+          />
         </div>
-        <Tabs
-          value={filter}
-          onChange={setFilter}
-          items={[
-            { label: `All (${summary.budgets.length})`, value: "All" },
-            { label: `Alerts (${alerts.length})`, value: "Alerts" },
-          ]}
-        />
-      </div>
-      <div className="budget-grid">
-        {visible.map((b) => {
-          const ratio = (b.spent / b.limit) * 100;
-          const tone = ratio >= 95 ? "red" : ratio >= 80 ? "amber" : "purple";
-          return (
+        <div className="budget-grid">
+          {(filter === "All" ? rows : alerts).map((b) => (
             <Card key={b.id} className="budget-card">
               <div className="flex items-start gap-3 mb-6">
-                <span
-                  className={`entity-icon ${tone === "red" ? "!bg-rose-50 !text-rose-700" : ""}`}
-                >
-                  <Icon name={b.icon} size={21} />
+                <span className="entity-icon">
+                  <Icon name="pie_chart" />
                 </span>
                 <div>
-                  <h3>{b.name}</h3>
-                  <p className="muted text-[10px] mt-1">{b.description}</p>
+                  <h3>{name(b)}</h3>
+                  <p className="muted text-[10px] mt-1">Monthly allocation</p>
                 </div>
               </div>
-              <div className="flex items-end justify-between mb-3">
+              <div className="flex justify-between items-end mb-3">
                 <div>
                   <span className="muted text-xs">Spent</span>
-                  <strong className="block font-mono text-2xl tracking-tight mt-1">
-                    {money(b.spent)}
+                  <strong className="font-mono block text-2xl mt-1">
+                    {amount(b.spent_amount)}
                   </strong>
                 </div>
                 <span className="font-mono muted text-xs">
-                  {ratio.toFixed(1)}%
+                  {percent(b.usage_percent)}
                 </span>
               </div>
-              <Progress value={ratio} tone={tone} />
-              <div className="flex justify-between mt-2 text-[11px]">
-                <span className="muted">Cap: {money(b.limit)}</span>
-                <span className={ratio >= 95 ? "negative" : "positive"}>
-                  {money(b.limit - b.spent)} left
+              <Progress
+                value={decimal(b.usage_percent)}
+                tone={
+                  decimal(b.usage_percent) >= 95
+                    ? "red"
+                    : decimal(b.usage_percent) >= 80
+                      ? "amber"
+                      : "purple"
+                }
+              />
+              <div className="flex justify-between text-[11px] mt-2">
+                <span className="muted">Cap: {amount(b.limit_amount)}</span>
+                <span
+                  className={
+                    decimal(b.remaining_amount) < 0 ? "negative" : "positive"
+                  }
+                >
+                  {amount(b.remaining_amount)} left
                 </span>
               </div>
               <div className="split-line" />
-              <div className="flex items-center justify-between gap-2 mb-4">
-                <span className="muted text-[10px]">
-                  Avg. Daily Spend: {money(b.spent / 20)}/day
-                </span>
+              <div className="flex justify-between gap-2 items-center">
                 <Badge
-                  tone={
-                    tone === "red"
-                      ? "red"
-                      : tone === "amber"
-                        ? "amber"
-                        : "green"
-                  }
+                  tone={decimal(b.usage_percent) >= 90 ? "amber" : "green"}
                 >
-                  {ratio >= 95
-                    ? "Overbudget Alert"
-                    : ratio >= 85
+                  {decimal(b.remaining_amount) < 0
+                    ? "Over Budget"
+                    : decimal(b.usage_percent) >= 90
                       ? "Near Limit"
-                      : ratio >= 75
-                        ? "High Burn Rate"
-                        : "On Track"}
+                      : "On Track"}
                 </Badge>
+                <Button icon="tune" onClick={() => setEditor(b)}>
+                  Edit Budget
+                </Button>
+                <button
+                  className="icon-button"
+                  aria-label={`Delete ${name(b)}`}
+                  onClick={() => setDeleting(b)}
+                >
+                  <Icon name="delete" size={15} />
+                </button>
               </div>
-              <Button
-                icon="tune"
-                className="w-full"
-                onClick={() => setEditing(b)}
-              >
-                Edit Budget
-              </Button>
             </Card>
-          );
-        })}
-        <button className="new-record-card" onClick={() => setEditing(null)}>
-          <span className="entity-icon !rounded-full">
-            <Icon name="add" size={26} />
-          </span>
-          <h3>New Category Target</h3>
-          <p>
-            Define personalized allocations for health, vacations or education
-          </p>
-        </button>
-      </div>
-      <Card
-        title="Budget vs Actual Spending"
-        subtitle="Side-by-side volume distribution across current cycle envelopes"
-      >
-        <div className="flex justify-end gap-4 muted text-[10px] mb-5">
-          <span>▰ Planned Target</span>
-          <span className="text-violet-700">▰ Actual Spent</span>
-        </div>
-        <div className="space-y-5">
-          {summary.budgets.map((budget) => (
-            <div key={budget.id}>
-              <div className="flex justify-between gap-3 text-xs mb-2">
-                <strong>{budget.name}</strong>
-                <span className="font-mono muted text-[10px]">
-                  {money(budget.spent)} / {money(budget.limit)} ·{" "}
-                  {((budget.spent / budget.limit) * 100).toFixed(1)}%
-                </span>
-              </div>
-              <div className="mb-1">
-                <Progress value={100} tone="light" />
-              </div>
-              <Progress
-                value={(budget.spent / budget.limit) * 100}
-                tone={
-                  budget.spent / budget.limit >= 0.95
-                    ? "red"
-                    : budget.spent / budget.limit >= 0.8
-                      ? "amber"
-                      : "green"
-                }
-              />
-            </div>
           ))}
+          <button className="new-record-card" onClick={() => setEditor(null)}>
+            <Icon name="add" size={26} />
+            <h3>New Category Target</h3>
+            <p>Choose an expense category and set its monthly limit.</p>
+          </button>
         </div>
-      </Card>
-      <Modal
-        open={editing !== undefined}
-        onClose={() => setEditing(undefined)}
-        title={editing ? "Edit Budget" : "Create New Budget"}
-      >
-        <RecordForm
-          fields={[
-            {
-              name: "name",
-              label: "Category Envelope",
-              type: "select",
-              value: editing?.name,
-              options: Array.from(
-                new Set([
-                  ...state.categories.filter(
-                    (c) =>
-                      ![
-                        "Salary",
-                        "Freelance",
-                        "Dividends",
-                        "Interest",
-                        "Loan / EMI",
-                        "Investment",
-                      ].includes(c),
-                  ),
-                  "Health & Medical",
-                  "Personal Care",
-                ]),
-              ),
-            },
-            {
-              name: "limit",
-              label: "Monthly Limit (₹)",
-              type: "number",
-              min: 1,
-              value: editing?.limit,
-            },
-            {
-              name: "threshold",
-              label: "Pacing Alert Threshold",
-              type: "select",
-              options: ["80", "90"],
-              value: editing?.threshold ?? 80,
-            },
-            {
-              name: "rollover",
-              label: "Surplus Auto-Rollover",
-              type: "checkbox",
-              value: editing?.rollover,
-            },
-          ]}
-          onCancel={() => setEditing(undefined)}
-          submit="Save Envelope"
-          onSave={(values) => {
-            const existing = state.budgets.find(
-              (b) => b.name === values.name && b.id !== editing?.id,
-            );
-            if (existing) {
-              notify(
-                "A budget already exists for this category. Edit its envelope instead.",
-              );
-              return;
-            }
-            const record: Budget = {
-              id: editing?.id ?? uid(),
-              name: values.name,
-              limit: Number(values.limit),
-              description:
-                editing?.description ?? "Personalized monthly allocation",
-              threshold: Number(values.threshold),
-              rollover: values.rollover === "on",
-              icon: editing?.icon ?? "account_balance_wallet",
-            };
-            update((current) => ({
-              ...current,
-              budgets: editing
-                ? current.budgets.map((b) => (b.id === editing.id ? record : b))
-                : [...current.budgets, record],
-              categories: Array.from(
-                new Set([...current.categories, record.name]),
-              ),
-            }));
-            notify("Budget envelope saved.");
-            setEditing(undefined);
-          }}
+        {rows.length === 0 && (
+          <EmptyState text="No budgets for this month. Create your first envelope." />
+        )}
+        <Card
+          title="Budget vs Actual Spending"
+          subtitle="Side-by-side comparison of current category envelopes"
         >
-          <p className="info-strip mt-5">
-            <Icon name="info" />
-            Thresholds and rollover preferences are stored with this demo
-            envelope.
-          </p>
-        </RecordForm>
-      </Modal>
+          <div className="space-y-5">
+            {rows.map((b) => (
+              <div key={b.id}>
+                <div className="flex justify-between text-xs gap-3 mb-2">
+                  <strong>{name(b)}</strong>
+                  <span className="muted font-mono">
+                    {amount(b.spent_amount)} / {amount(b.limit_amount)}
+                  </span>
+                </div>
+                <div className="mb-1">
+                  <Progress value={100} tone="light" />
+                </div>
+                <Progress
+                  value={decimal(b.usage_percent)}
+                  tone={decimal(b.usage_percent) > 95 ? "red" : "green"}
+                />
+              </div>
+            ))}
+          </div>
+        </Card>
+      </ApiBoundary>
+      {editor !== undefined && (
+        <ApiBoundary query={categories}>
+          <ResourceEditor
+            path="/api/budgets"
+            record={editor ?? undefined}
+            title={editor ? "Edit Budget" : "Create New Budget"}
+            categories={categories.data}
+            defaults={{ budget_month: `${month}-01` }}
+            onClose={() => setEditor(undefined)}
+          />
+        </ApiBoundary>
+      )}
+      <ConfirmDelete
+        key={deleting?.id ?? "none"}
+        open={Boolean(deleting)}
+        onClose={() => setDeleting(undefined)}
+        onConfirm={async () => {
+          if (deleting) await mutate(`/api/budgets/${deleting.id}`, "DELETE");
+        }}
+      />
     </div>
   );
 }

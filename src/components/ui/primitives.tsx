@@ -3,10 +3,14 @@
 import {
   useEffect,
   useRef,
+  useState,
+  useSyncExternalStore,
   type ButtonHTMLAttributes,
   type ReactNode,
 } from "react";
 import { Icon } from "./icon";
+import { errorMessage } from "@/lib/api-client";
+const subscribeReady = () => () => {};
 
 export function Button({
   children,
@@ -18,11 +22,17 @@ export function Button({
   icon?: string;
   variant?: "primary" | "secondary" | "ghost" | "danger";
 }) {
+  const ready = useSyncExternalStore(
+    subscribeReady,
+    () => true,
+    () => false,
+  );
   return (
     <button
       type="button"
       className={`button button-${variant} ${className}`}
       {...props}
+      disabled={!ready || props.disabled}
     >
       {icon && <Icon name={icon} size={17} />}
       {children}
@@ -200,6 +210,7 @@ export function Modal({
   subtitle,
   children,
   wide = false,
+  busy = false,
 }: {
   open: boolean;
   onClose: () => void;
@@ -207,6 +218,7 @@ export function Modal({
   subtitle?: string;
   children: ReactNode;
   wide?: boolean;
+  busy?: boolean;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -228,7 +240,10 @@ export function Modal({
     <dialog
       ref={ref}
       className={`modal ${wide ? "modal-wide" : ""}`}
-      onCancel={onClose}
+      onCancel={(event) => {
+        if (busy) event.preventDefault();
+        else onClose();
+      }}
       onClose={onClose}
       onClick={(event) => {
         if (event.target === ref.current) onClose();
@@ -245,6 +260,7 @@ export function Modal({
           className="icon-button"
           aria-label="Close dialog"
           onClick={onClose}
+          disabled={busy}
         >
           <Icon name="close" />
         </button>
@@ -257,7 +273,7 @@ export interface FormField {
   name: string;
   label: string;
   type?: "text" | "number" | "date" | "email" | "tel" | "select" | "checkbox";
-  options?: string[];
+  options?: (string | { value: string; label: string; disabled?: boolean })[];
   value?: string | number | boolean;
   min?: number;
   max?: number;
@@ -271,76 +287,122 @@ export function RecordForm({
   onCancel,
   submit = "Save",
   children,
+  onPendingChange,
+  onFieldChange,
 }: {
   fields: FormField[];
-  onSave: (values: Record<string, string>) => void;
+  onSave: (values: Record<string, string>) => void | Promise<void>;
   onCancel: () => void;
   submit?: string;
   children?: ReactNode;
+  onPendingChange?: (pending: boolean) => void;
+  onFieldChange?: (name: string, value: string) => void;
 }) {
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+  const saving = useRef(false);
   return (
     <form
-      onSubmit={(event) => {
+      onSubmit={async (event) => {
         event.preventDefault();
+        if (saving.current) return;
+        saving.current = true;
+        setPending(true);
+        setError("");
+        onPendingChange?.(true);
         const form = new FormData(event.currentTarget);
-        onSave(
-          Object.fromEntries(
-            Array.from(form.entries()).map(([key, value]) => [
-              key,
-              String(value),
-            ]),
-          ),
-        );
+        try {
+          await onSave(
+            Object.fromEntries(
+              Array.from(form.entries()).map(([key, value]) => [
+                key,
+                String(value),
+              ]),
+            ),
+          );
+        } catch (error) {
+          setError(errorMessage(error));
+        } finally {
+          saving.current = false;
+          setPending(false);
+          onPendingChange?.(false);
+        }
       }}
     >
-      <div className="form-grid">
-        {fields.map((field) => (
-          <label
-            className={field.type === "checkbox" ? "checkbox-field" : "field"}
-            key={field.name}
-          >
-            <span>{field.label}</span>
-            {field.type === "select" ? (
-              <select
-                aria-label={field.label}
-                name={field.name}
-                defaultValue={String(field.value ?? field.options?.[0] ?? "")}
-                required={field.required !== false}
-              >
-                {field.options?.map((option) => (
-                  <option key={option}>{option}</option>
-                ))}
-              </select>
-            ) : field.type === "checkbox" ? (
-              <input
-                name={field.name}
-                type="checkbox"
-                defaultChecked={Boolean(field.value)}
-              />
-            ) : (
-              <input
-                name={field.name}
-                type={field.type ?? "text"}
-                defaultValue={String(field.value ?? "")}
-                min={field.min}
-                max={field.max}
-                step={
-                  field.step ?? (field.type === "number" ? "0.01" : undefined)
-                }
-                required={field.required !== false}
-                placeholder={field.placeholder}
-              />
-            )}
-          </label>
-        ))}
-      </div>
-      {children}
-      <div className="modal-footer">
-        <Button onClick={onCancel}>Cancel</Button>
-        <Button type="submit" variant="primary" icon="check">
-          {submit}
-        </Button>
-      </div>
+      <fieldset disabled={pending} className="contents">
+        <div className="form-grid">
+          {fields.map((field) => (
+            <label
+              className={field.type === "checkbox" ? "checkbox-field" : "field"}
+              key={field.name}
+            >
+              <span>{field.label}</span>
+              {field.type === "select" ? (
+                <select
+                  aria-label={field.label}
+                  name={field.name}
+                  onChange={(event) =>
+                    onFieldChange?.(field.name, event.target.value)
+                  }
+                  defaultValue={String(
+                    field.value ??
+                      (typeof field.options?.[0] === "string"
+                        ? field.options[0]
+                        : field.options?.[0]?.value) ??
+                      "",
+                  )}
+                  required={field.required !== false}
+                >
+                  {field.options?.map((option) =>
+                    typeof option === "string" ? (
+                      <option key={option}>{option}</option>
+                    ) : (
+                      <option
+                        key={option.value}
+                        value={option.value}
+                        disabled={option.disabled}
+                      >
+                        {option.label}
+                      </option>
+                    ),
+                  )}
+                </select>
+              ) : field.type === "checkbox" ? (
+                <input
+                  name={field.name}
+                  type="checkbox"
+                  defaultChecked={Boolean(field.value)}
+                />
+              ) : (
+                <input
+                  name={field.name}
+                  type={field.type ?? "text"}
+                  defaultValue={String(field.value ?? "")}
+                  min={field.min}
+                  max={field.max}
+                  step={
+                    field.step ?? (field.type === "number" ? "0.01" : undefined)
+                  }
+                  required={field.required !== false}
+                  placeholder={field.placeholder}
+                />
+              )}
+            </label>
+          ))}
+        </div>
+        {children}
+        {error && (
+          <p role="alert" className="api-error mt-4">
+            {error}
+          </p>
+        )}
+        <div className="modal-footer">
+          <Button onClick={onCancel}>Cancel</Button>
+          <Button type="submit" variant="primary" icon="check">
+            {pending ? "Saving…" : submit}
+          </Button>
+        </div>
+      </fieldset>
     </form>
   );
 }
@@ -349,28 +411,57 @@ export function ConfirmDelete({
   onClose,
   onConfirm,
   title = "Delete record?",
-  description = "This removes the record from this browser's demo data.",
+  description = "This permanently deletes the record from your finance account.",
 }: {
   open: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
   title?: string;
   description?: string;
 }) {
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+  const deleting = useRef(false);
   return (
-    <Modal open={open} onClose={onClose} title={title}>
+    <Modal
+      open={open}
+      onClose={() => {
+        if (!pending) onClose();
+      }}
+      title={title}
+      busy={pending}
+    >
       <p className="muted">{description}</p>
+      {error && (
+        <p role="alert" className="api-error mt-4">
+          {error}
+        </p>
+      )}
       <div className="modal-footer">
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose} disabled={pending}>
+          Cancel
+        </Button>
         <Button
           variant="danger"
-          onClick={() => {
-            onConfirm();
-            onClose();
+          disabled={pending}
+          onClick={async () => {
+            if (deleting.current) return;
+            deleting.current = true;
+            setPending(true);
+            setError("");
+            try {
+              await onConfirm();
+              onClose();
+            } catch (error) {
+              setError(errorMessage(error));
+            } finally {
+              deleting.current = false;
+              setPending(false);
+            }
           }}
           icon="delete"
         >
-          Delete
+          {pending ? "Deleting…" : "Delete"}
         </Button>
       </div>
     </Modal>

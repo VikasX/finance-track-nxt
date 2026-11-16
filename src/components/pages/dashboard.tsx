@@ -1,81 +1,118 @@
 "use client";
+import { useAmount } from "../use-amount";
+
 import Link from "next/link";
 import { useState } from "react";
+import type {
+  CategoryRead,
+  DashboardRead,
+  MonthlyReportRead,
+} from "@/types/api";
+import { useApi } from "@/lib/api-cache";
+import { apiPath } from "@/lib/api-client";
+import { decimal, monthRange, percent } from "@/lib/api-format";
+import { dateLabel, downloadCSV } from "@/lib/finance";
 import { useFinance } from "../finance-provider";
-import { selectSummary } from "@/lib/selectors";
-import { cashTotals, dateLabel, downloadCSV, money, sum } from "@/lib/finance";
+import { ApiBoundary } from "../ui/api-boundary";
 import {
   Badge,
   Button,
   Card,
+  EmptyState,
   Metric,
   PageHeading,
   Progress,
   Tabs,
 } from "../ui/primitives";
-import { FinancialChart, AllocationChart, CHART_COLORS } from "../charts";
+import { AllocationChart, CHART_COLORS, FinancialChart } from "../charts";
 import { TransactionTable } from "../transaction-table";
-import { Icon } from "../ui/icon";
 export function Dashboard() {
-  const { state, month, setTransactionOpen } = useFinance();
-  const summary = selectSummary(state, month);
+  const amount = useAmount();
+  const { month, setTransactionOpen } = useFinance();
   const [period, setPeriod] = useState("Monthly");
+  const [category, setCategory] = useState("");
   const [advisory, setAdvisory] = useState(true);
-  const [category, setCategory] = useState("All Categories");
-  const cashflow =
+  const [y, m] = month.split("-").map(Number);
+  const asOf = new Date(y, m, 1);
+  const as_of = `${asOf.getFullYear()}-${String(asOf.getMonth() + 1).padStart(2, "0")}-01`;
+  const dashboard = useApi<DashboardRead>(
+    apiPath("/api/dashboard", { month: `${month}-01`, as_of }),
+  );
+  const categories = useApi<CategoryRead[]>("all:/api/categories");
+  const monthly = useApi<MonthlyReportRead>(
+    apiPath("/api/reports/monthly", {
+      date_from: `${y}-01-01`,
+      date_to: monthRange(month).date_to,
+    }),
+  );
+  const d = dashboard.data;
+  const catName = (id: number) =>
+    categories.data?.find((c) => c.id === id)?.name ?? `Category ${id}`;
+  const monthlyPoints = (monthly.data?.months ?? []).map((p) => ({
+    name: dateLabel(p.month, { month: "short" }),
+    income: decimal(p.income),
+    expense: decimal(p.expenses),
+  }));
+  const chart =
     period === "Monthly"
-      ? summary.cashflow
+      ? monthlyPoints
       : period === "Quarterly"
         ? Array.from(
-            { length: Math.ceil(summary.cashflow.length / 3) },
+            { length: Math.ceil(monthlyPoints.length / 3) },
             (_, i) => ({
               name: `Q${i + 1}`,
-              income: sum(
-                summary.cashflow.slice(i * 3, i * 3 + 3),
-                (p) => p.income,
-              ),
-              expense: sum(
-                summary.cashflow.slice(i * 3, i * 3 + 3),
-                (p) => p.expense,
-              ),
+              income: monthlyPoints
+                .slice(i * 3, i * 3 + 3)
+                .reduce((n, p) => n + p.income, 0),
+              expense: monthlyPoints
+                .slice(i * 3, i * 3 + 3)
+                .reduce((n, p) => n + p.expense, 0),
             }),
           )
         : [
             {
-              name: month.slice(0, 4),
-              income: sum(summary.cashflow, (p) => p.income),
-              expense: sum(summary.cashflow, (p) => p.expense),
+              name: String(y),
+              income: monthlyPoints.reduce((n, p) => n + p.income, 0),
+              expense: monthlyPoints.reduce((n, p) => n + p.expense, 0),
             },
           ];
-  const recent = [...summary.transactions]
-    .filter((t) => category === "All Categories" || t.category === category)
-    .sort((a, b) => b.date.localeCompare(a.date));
-  const previousMonth = `${month.slice(0, 4)}-${String(Number(month.slice(5)) - 1).padStart(2, "0")}`;
-  const previous = cashTotals(
-    state.transactions.filter((t) => t.date.startsWith(previousMonth)),
-  );
-  const change = previous.income
-    ? (summary.income / previous.income - 1) * 100
-    : 0;
+  const allocation = d
+    ? [
+        {
+          name: "Stocks & Mutual Funds",
+          value: decimal(d.investments.current_value),
+        },
+        {
+          name: "Fixed Deposits (Estimated)",
+          value: decimal(d.investments.fixed_deposit_estimated_value),
+        },
+        {
+          name: "PPF Reported Balance",
+          value: decimal(d.investments.ppf_reported_balance),
+        },
+      ]
+    : [];
   return (
     <div className="page-stack">
       <PageHeading
         title="Financial Overview"
-        description="Your complete financial telemetry, performance analytics, and automated liquidity schedule."
+        description="Your financial telemetry, performance analytics, and upcoming liquidity schedule."
         actions={
           <>
-            <Badge tone="gray">INR ₹</Badge>
+            <Badge tone="gray">{d?.currency ?? "INR"}</Badge>
             <Button
+              disabled={!d}
               icon="file_download"
-              onClick={() =>
-                downloadCSV("fintrack-overview.csv", [
-                  ["Metric", "Value"],
-                  ["Income", summary.income],
-                  ["Expenses", summary.expense],
-                  ["Net saved", summary.net],
-                  ["Portfolio", summary.portfolio],
-                ])
-              }
+              onClick={() => {
+                if (d)
+                  downloadCSV("fintrack-overview.csv", [
+                    ["Metric", "Value"],
+                    ["Income", d.income],
+                    ["Expenses", d.expenses],
+                    ["Net Cash Flow", d.balance],
+                    ["Portfolio", d.investments.total_asset_value],
+                  ]);
+              }}
             >
               Export
             </Button>
@@ -89,259 +126,258 @@ export function Dashboard() {
           </>
         }
       />
-      <div className="metric-grid">
-        <Metric
-          label="Total Net Balance"
-          value={money(summary.cashBalance)}
-          icon="account_balance"
-          detail={
-            <>
-              <Badge tone="green">↗ +12.4%</Badge> vs Sep
-            </>
-          }
-        />
-        <Metric
-          label="Monthly Inflow"
-          value={money(summary.income)}
-          icon="south_west"
-          detail={
-            <>
-              <Badge tone="green">↑ {change.toFixed(1)}%</Badge> vs previous
-              month
-            </>
-          }
-        />
-        <Metric
-          label="Monthly Outflow"
-          value={money(summary.expense)}
-          icon="north_east"
-          detail={
-            <>
-              <Badge tone="green">↓ −4.1%</Badge> outflow rate
-            </>
-          }
-          footer={`${summary.income ? ((summary.expense / summary.income) * 100).toFixed(1) : "0"}% spend ratio`}
-        />
-        <Metric
-          label="Total Portfolio"
-          value={money(summary.portfolio)}
-          icon="insights"
-          detail={<Badge tone="green">↗ +18.6% CAGR</Badge>}
-        />
-      </div>
-      <div className="grid-main">
-        <Card
-          title="Cash Flow Overview"
-          subtitle="Monthly recurring delta between verified credit entries and debit entries"
-          action={<Badge tone="green">+{money(summary.net)} Net Saved</Badge>}
-        >
-          <div className="flex justify-end mb-5">
-            <Tabs
-              value={period}
-              onChange={setPeriod}
-              items={["Monthly", "Quarterly", "Yearly"]}
-            />
-          </div>
-          <FinancialChart data={cashflow} height={285} />
-          <div className="info-strip mt-5 flex-wrap">
-            <span>
-              Avg Savings Ratio:{" "}
-              <strong className="positive">
-                {summary.savingsRate.toFixed(1)}%
-              </strong>
-            </span>
-            <Link
-              href="/income-expenses"
-              className="ml-auto text-violet-700 text-xs font-semibold"
-            >
-              Cashflow Statement →
-            </Link>
-          </div>
-        </Card>
-        <Card
-          title="Budget Overview"
-          subtitle={`${dateLabel(`${month}-01`, { month: "long" })} Spending Utilization (${money(summary.budgetSpent)} spent)`}
-          action={
-            <Link href="/budgets" aria-label="Manage budgets">
-              <Icon name="more_vert" />
-            </Link>
-          }
-        >
-          <div className="space-y-5">
-            {summary.budgets.map((b) => (
-              <div key={b.id}>
-                <div className="flex items-center justify-between text-xs mb-2">
-                  <span className="flex gap-2 items-center">
-                    <Icon name={b.icon} size={15} />
-                    {b.name.replace(" & Retail", "").replace(" & Leisure", "")}
-                  </span>
-                  <span className="font-mono text-[10px]">
-                    {money(b.spent)} / {money(b.limit)}
-                  </span>
-                </div>
-                <div className="flex gap-3 items-center">
-                  <div className="flex-1">
-                    <Progress
-                      value={(b.spent / b.limit) * 100}
-                      tone={b.spent / b.limit > 0.9 ? "amber" : "purple"}
-                    />
-                  </div>
-                  <span className="muted text-[10px] w-7">
-                    {((b.spent / b.limit) * 100).toFixed(0)}%
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="split-line" />
-          <div className="flex items-center justify-between text-xs">
-            <span className="muted">
-              Total Cap: {money(summary.budgetLimit)}
-            </span>
-            <Link className="text-violet-700 font-semibold" href="/budgets">
-              Manage Budgets
-            </Link>
-          </div>
-        </Card>
-      </div>
-      <div className="grid-halves">
-        <Card
-          title="Investment Allocation"
-          subtitle="Asset diversification portfolio and returns"
-          action={<Badge tone="green">+22.5%</Badge>}
-        >
-          <div className="allocation-layout">
-            <AllocationChart
-              data={summary.allocation}
-              center={money(summary.portfolio)}
-              caption="Current Value"
-            />
-            {summary.allocation.map((item, index) => (
-              <div className="legend-row" key={item.name}>
-                <span
-                  className="legend-dot"
-                  style={{ background: CHART_COLORS[index] }}
-                />
-                {item.name}
-                <strong>{money(item.value)}</strong>
-              </div>
-            ))}
-          </div>
-          <div className="split-line" />
-          <Link
-            href="/stocks-investments"
-            className="text-xs font-semibold text-violet-700 flex items-center justify-between"
-          >
-            Manage Investments
-            <Icon name="arrow_forward" size={16} />
-          </Link>
-        </Card>
-        <Card
-          title="Upcoming Obligations"
-          subtitle="Scheduled EMIs, SIPs, and maturity credits"
-          action={<Icon name="calendar_month" />}
-        >
-          <div className="space-y-1">
-            {state.events
-              .filter((e) => !e.paid)
-              .sort((a, b) => a.date.localeCompare(b.date))
-              .slice(0, 4)
-              .map((event) => (
-                <div
-                  className="flex items-center gap-3 border-b border-slate-100 py-4"
-                  key={event.id}
-                >
-                  <div className="event-date">
-                    <small>{dateLabel(event.date, { month: "short" })}</small>
-                    <strong>{event.date.slice(8)}</strong>
-                  </div>
-                  <div className="min-w-0">
-                    <strong className="text-xs block">{event.title}</strong>
-                    <small className="muted text-[10px]">
-                      {event.description}
-                    </small>
-                  </div>
-                  <div className="ml-auto text-right">
-                    <strong
-                      className={`font-mono text-xs whitespace-nowrap ${event.category === "Maturity" || event.category === "Income" ? "positive" : ""}`}
-                    >
-                      {money(event.amount)}
-                    </strong>
-                    <div className="mt-1">
-                      <Badge
-                        tone={event.category === "Maturity" ? "green" : "gray"}
-                      >
-                        {event.category.split(" /")[0]}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-          <Link
-            href="/calendar"
-            className="text-xs font-semibold text-violet-700 block mt-5 text-right"
-          >
-            View All Reminders →
-          </Link>
-        </Card>
-      </div>
-      <TransactionTable
-        compact
-        rows={recent}
-        toolbar={
+      <ApiBoundary query={dashboard}>
+        {d && (
           <>
-            <div>
-              <h2>Recent Transactions</h2>
-              <p className="muted text-xs mt-1">
-                Ledger updates across linked bank accounts and credit lines
-              </p>
+            <div className="metric-grid">
+              <Metric
+                label="Net Cash Flow"
+                value={amount(d.balance)}
+                icon="account_balance"
+                detail="Recorded income less cash outflows"
+              />
+              <Metric
+                label="Monthly Inflow"
+                value={amount(d.income)}
+                icon="south_west"
+                detail="Recorded income credits"
+              />
+              <Metric
+                label="Monthly Expenses"
+                value={amount(d.expenses)}
+                icon="north_east"
+                detail="Operating expenses only"
+                footer={`${percent(d.cash_flow.savings_rate_percent)} savings rate`}
+              />
+              <Metric
+                label="Total Portfolio"
+                value={amount(d.investments.total_asset_value)}
+                icon="insights"
+                detail={
+                  <Badge tone="green">
+                    {percent(d.investments.gain_loss_percent)} investment return
+                  </Badge>
+                }
+              />
             </div>
-            <div className="filters">
-              <select
-                className="filter-select"
-                aria-label="Recent transaction category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
+            <div className="info-strip">
+              <span>{d.balance_basis}</span>
+            </div>
+            <div className="grid-main">
+              <Card
+                title="Cash Flow Overview"
+                subtitle="Income and operating expenses across the selected year"
+                action={
+                  <Badge tone="green">
+                    {amount(d.cash_flow.net_cash_flow)} Net Cash Flow
+                  </Badge>
+                }
               >
-                <option>All Categories</option>
-                {state.categories.map((c) => (
-                  <option key={c}>{c}</option>
+                <div className="flex justify-end mb-5">
+                  <Tabs
+                    value={period}
+                    onChange={setPeriod}
+                    items={["Monthly", "Quarterly", "Yearly"]}
+                  />
+                </div>
+                <ApiBoundary query={monthly}>
+                  <FinancialChart data={chart} />
+                </ApiBoundary>
+                <div className="info-strip mt-5 flex-wrap">
+                  <span>
+                    Savings Rate:{" "}
+                    <strong className="positive">
+                      {percent(d.cash_flow.savings_rate_percent)}
+                    </strong>
+                  </span>
+                  <Link
+                    href="/income-expenses"
+                    className="ml-auto text-violet-700 text-xs font-semibold"
+                  >
+                    Cashflow Statement →
+                  </Link>
+                </div>
+              </Card>
+              <Card
+                title="Budget Overview"
+                subtitle={`${dateLabel(d.month, { month: "long" })} · ${amount(d.budget_usage.spent_amount)} spent`}
+              >
+                <div className="space-y-5">
+                  {d.budget_usage.budgets.length ? (
+                    d.budget_usage.budgets.map((b) => (
+                      <div key={b.id}>
+                        <div className="flex items-center justify-between gap-2 text-xs mb-2">
+                          <span>{catName(b.category_id)}</span>
+                          <span className="font-mono text-[10px]">
+                            {amount(b.spent_amount)} / {amount(b.limit_amount)}
+                          </span>
+                        </div>
+                        <Progress
+                          value={decimal(b.usage_percent)}
+                          tone={
+                            decimal(b.usage_percent) > 90 ? "amber" : "purple"
+                          }
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <EmptyState text="No budgets for this month." />
+                  )}
+                </div>
+                <div className="split-line" />
+                <div className="flex justify-between text-xs">
+                  <span className="muted">
+                    Total Cap: {amount(d.budget_usage.limit_amount)}
+                  </span>
+                  <Link
+                    href="/budgets"
+                    className="text-violet-700 font-semibold"
+                  >
+                    Manage Budgets
+                  </Link>
+                </div>
+              </Card>
+            </div>
+            <div className="grid-halves">
+              <Card
+                title="Investment Allocation"
+                subtitle="Current reported asset snapshots"
+              >
+                <AllocationChart
+                  data={allocation}
+                  center={amount(d.investments.total_asset_value)}
+                  caption="Current Value"
+                />
+                {allocation.map((a, i) => (
+                  <div className="legend-row" key={a.name}>
+                    <i
+                      className="legend-dot"
+                      style={{ background: CHART_COLORS[i] }}
+                    />
+                    {a.name}
+                    <strong>{amount(a.value)}</strong>
+                  </div>
                 ))}
-              </select>
-              <Link
-                href="/income-expenses"
-                className="text-violet-700 text-xs font-semibold"
+                <div className="split-line" />
+                <Link
+                  href="/stocks-investments"
+                  className="text-xs text-violet-700 font-semibold"
+                >
+                  Manage Investments →
+                </Link>
+              </Card>
+              <Card
+                title="Upcoming Obligations"
+                subtitle={`As of ${dateLabel(d.as_of)} · Scheduled loans, SIPs, maturities and reminders`}
               >
-                View All Transactions →
-              </Link>
+                <div>
+                  {d.upcoming_obligations.length ? (
+                    d.upcoming_obligations.slice(0, 6).map((e) => (
+                      <div
+                        className="flex items-center gap-3 border-b border-slate-100 py-4"
+                        key={`${e.source}-${e.source_id}`}
+                      >
+                        <div className="event-date">
+                          <small>
+                            {dateLabel(e.due_date, { month: "short" })}
+                          </small>
+                          <strong>{e.due_date.slice(8)}</strong>
+                        </div>
+                        <div>
+                          <strong className="block text-xs">{e.title}</strong>
+                          <small className="muted text-[10px]">
+                            {e.source.replaceAll("_", " ")}
+                            {e.overdue ? " · Overdue" : ""}
+                          </small>
+                        </div>
+                        <strong
+                          className={`ml-auto font-mono text-xs ${e.direction === "inflow" ? "positive" : ""}`}
+                        >
+                          {amount(e.amount)}
+                        </strong>
+                      </div>
+                    ))
+                  ) : (
+                    <EmptyState text="No upcoming obligations." />
+                  )}
+                </div>
+                <Link
+                  href="/calendar"
+                  className="block text-right mt-5 text-xs text-violet-700 font-semibold"
+                >
+                  View All Reminders →
+                </Link>
+              </Card>
             </div>
+            <ApiBoundary query={categories}>
+              <TransactionTable
+                compact
+                rows={d.recent_transactions.filter(
+                  (t) => !category || String(t.category_id) === category,
+                )}
+                categories={categories.data}
+                toolbar={
+                  <>
+                    <div>
+                      <h2>Recent Transactions</h2>
+                      <p className="muted text-xs mt-1">
+                        Latest recorded ledger entries
+                      </p>
+                    </div>
+                    <div className="filters">
+                      <select
+                        aria-label="Recent transaction category"
+                        className="filter-select"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                      >
+                        <option value="">All Categories</option>
+                        {categories.data?.map((c) => (
+                          <option value={c.id} key={c.id}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </select>
+                      <Link
+                        href="/income-expenses"
+                        className="text-xs text-violet-700 font-semibold"
+                      >
+                        View All Transactions →
+                      </Link>
+                    </div>
+                  </>
+                }
+              />
+            </ApiBoundary>
+            {advisory && (
+              <div className="advisory">
+                <div>
+                  <h3>FinTrack Financial Summary</h3>
+                  <p>
+                    Recorded savings rate:{" "}
+                    {percent(d.cash_flow.savings_rate_percent)}. Review{" "}
+                    {amount(d.outstanding_loans)} in outstanding loans and your
+                    scheduled commitments before allocating surplus.
+                  </p>
+                </div>
+                <Link
+                  href="/stocks-investments"
+                  className="button button-primary"
+                >
+                  Review Allocation
+                </Link>
+                <button
+                  className="icon-button"
+                  aria-label="Dismiss advisory"
+                  onClick={() => setAdvisory(false)}
+                >
+                  ×
+                </button>
+              </div>
+            )}
           </>
-        }
-      />
-      {advisory && (
-        <div className="advisory">
-          <Icon name="smart_toy" size={28} />
-          <div>
-            <h3>FinTrack Intelligence Advisory</h3>
-            <p>
-              You have {money(summary.net)} of monthly surplus. Review your
-              investment allocation and upcoming obligations before putting idle
-              cash to work.
-            </p>
-          </div>
-          <Link href="/stocks-investments" className="button button-primary">
-            Review Allocation
-          </Link>
-          <button
-            className="icon-button"
-            aria-label="Dismiss advisory"
-            onClick={() => setAdvisory(false)}
-          >
-            <Icon name="close" />
-          </button>
-        </div>
-      )}
+        )}
+      </ApiBoundary>
     </div>
   );
 }
