@@ -1,3 +1,11 @@
+## Project continuity
+
+- At the start of a new session in this repository, read [docs/PROJECT_HANDOFF.md](docs/PROJECT_HANDOFF.md) for the current project state, flow maps, decisions, limitations, and verification history.
+- Use [docs/READING_CODE.md](docs/READING_CODE.md) for the beginner walkthrough. Keep what/why comments accurate when changing code; explain unfamiliar concepts plainly.
+- Inspect Git status and current files before acting. Historical passing checks in the handoff are not evidence of a fresh run or a currently running service.
+- After meaningful completed work, update the handoff with the actual outcome, remaining work, and checks performed. Keep credentials out of documentation.
+- Continue from the user's current request; do not restart completed setup or invent a next implementation phase from historical plans.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know

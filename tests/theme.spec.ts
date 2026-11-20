@@ -20,8 +20,9 @@ test("light and dark selection persist across navigation, reload, and tabs", asy
   await page.goto("/dashboard");
   await page
     .getByRole("banner")
-    .getByLabel("Color theme", { exact: true })
-    .selectOption("dark");
+    .getByRole("group", { name: "Color theme", exact: true })
+    .getByRole("button", { name: "Dark theme", exact: true })
+    .click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("body")).toHaveCSS(
     "background-color",
@@ -32,17 +33,27 @@ test("light and dark selection persist across navigation, reload, and tabs", asy
     .getByRole("link", { name: "Settings", exact: true })
     .click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  // Settings and the header share the same saved preference.
+  const settingsTheme = page.getByRole("group", { name: "Settings color theme", exact: true });
+  await expect(settingsTheme.getByRole("button", { name: "Dark theme", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await settingsTheme.getByRole("button", { name: "Light theme", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  // Native toggle buttons can also be activated with the keyboard.
+  await settingsTheme.getByRole("button", { name: "Dark theme", exact: true }).focus();
+  await page.keyboard.press("Space");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.reload();
   await expect(
-    page.getByRole("banner").getByLabel("Color theme", { exact: true }),
-  ).toHaveValue("dark");
+    page.getByRole("banner").getByRole("button", { name: "Dark theme", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
   const other = await context.newPage();
   await other.goto("/budgets");
   await expect(other.locator("html")).toHaveAttribute("data-theme", "dark");
   await page
     .getByRole("banner")
-    .getByLabel("Color theme", { exact: true })
-    .selectOption("light");
+    .getByRole("group", { name: "Color theme", exact: true })
+    .getByRole("button", { name: "Light theme", exact: true })
+    .click();
   await expect(other.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(page.locator("body")).toHaveCSS(
     "background-color",
@@ -57,17 +68,22 @@ test("system mode follows OS changes and an explicit preference overrides the OS
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/dashboard");
   await expect(
-    page.getByRole("banner").getByLabel("Color theme", { exact: true }),
-  ).toHaveValue("system");
+    page.getByRole("banner").getByRole("button", { name: "System theme", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.emulateMedia({ colorScheme: "light" });
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await page
     .getByRole("banner")
-    .getByLabel("Color theme", { exact: true })
-    .selectOption("dark");
+    .getByRole("group", { name: "Color theme", exact: true })
+    .getByRole("button", { name: "Dark theme", exact: true })
+    .click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.emulateMedia({ colorScheme: "light" });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.getByRole("banner").getByRole("button", { name: "System theme", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.emulateMedia({ colorScheme: "dark" });
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
@@ -117,13 +133,15 @@ test("all pages, dialogs, charts and mobile navigation support dark mode", async
   await page.setViewportSize({ width: 390, height: 844 });
   await page
     .getByRole("banner")
-    .getByLabel("Color theme", { exact: true })
-    .selectOption("light");
+    .getByRole("group", { name: "Color theme", exact: true })
+    .getByRole("button", { name: "Light theme", exact: true })
+    .click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+  await page.screenshot({ path: ".local/theme-toggle-mobile.png" });
   expect(errors).toEqual([]);
 });

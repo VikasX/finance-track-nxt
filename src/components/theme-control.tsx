@@ -13,6 +13,11 @@ import { useTheme, type ThemeMode } from "./theme-provider";
 // Resolve existing design icon names through the shared Lucide mapping, keeping icon rendering consistent.
 import { Icon } from "./ui/icon";
 const subscribeHydration = () => () => {};
+const themeOptions: { value: ThemeMode; label: string; icon: string }[] = [
+  { value: "light", label: "Light", icon: "sun" },
+  { value: "dark", label: "Dark", icon: "moon" },
+  { value: "system", label: "System", icon: "monitor" },
+];
 // Receive an optional accessible label so the header and Settings selectors remain distinguishable. Both call the same context setter rather than separate local state.
 export function ThemeControl({ label = "Color theme" }: { label?: string }) {
   // Read the shared appearance value and setter from ThemeProvider rather than maintaining a second theme preference in this control.
@@ -24,24 +29,27 @@ export function ThemeControl({ label = "Color theme" }: { label?: string }) {
     () => false,
   );
   return (
-    <label className="theme-control" title="Color theme">
-      <Icon
-        name={mode === "dark" ? "moon" : mode === "light" ? "sun" : "monitor"}
-        size={17}
-      />
-      <select
-        aria-label={label}
-        disabled={!ready}
-        value={mode}
-        onChange={
-          // Tell ThemeProvider to save and broadcast the selected appearance; it updates the document theme attribute and other selectors.
-          (event) => setMode(event.target.value as ThemeMode)
-        }
-      >
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-        <option value="system">System</option>
-      </select>
-    </label>
+    <div className="theme-control" role="group" aria-label={label}>
+      {/* Each native button supports Tab and Enter/Space. aria-pressed exposes the
+          selected mode; the shared provider keeps both controls in sync. */}
+      {themeOptions.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          className="theme-option"
+          aria-label={`${option.label} theme`}
+          aria-pressed={mode === option.value}
+          title={
+            option.value === "system"
+              ? "System theme (follow device)"
+              : `${option.label} theme`
+          }
+          disabled={!ready}
+          onClick={() => setMode(option.value)}
+        >
+          <Icon name={option.icon} size={17} />
+        </button>
+      ))}
+    </div>
   );
 }

@@ -1772,13 +1772,13 @@ input[type="range"] {
   }
 }
 .theme-control {
-  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 8px;
+  flex-shrink: 0;
+  gap: 2px;
+  padding: 3px;
   border: 1px solid var(--line);
-  border-radius: 7px;
+  border-radius: 999px;
   color: var(--secondary);
   background: var(--surface-muted);
 }
@@ -1826,22 +1826,40 @@ input[type="range"] {
     animation-duration: 2s;
   }
 }
-.theme-control select {
+.theme-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   border: 0;
-  outline: none;
+  border-radius: 50%;
   background: transparent;
-  color: var(--ink);
-  font-size: 11px;
+  color: var(--secondary);
   cursor: pointer;
-  min-width: 65px;
+  transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
 }
-.theme-control:focus-within {
+.theme-option:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+.theme-option[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--purple);
+  box-shadow: 0 1px 4px #00000018, inset 0 0 0 1px var(--line);
+}
+.theme-option:focus-visible {
   outline: 2px solid #a78bfa;
   outline-offset: 2px;
 }
-.theme-control select option {
-  background: var(--surface);
-  color: var(--ink);
+.theme-option:disabled {
+  cursor: default;
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-option {
+    transition: none;
+  }
 }
 :root[data-theme="dark"] .button-primary:hover {
   background: #6d28d9;
@@ -1892,18 +1910,9 @@ input[type="range"] {
 }
 /* Responsive/accessibility override: apply these rules only when this viewport or user-preference condition matches. Later matching rules override earlier ones. */
 @media (max-width: 639px) {
-  .theme-control {
+  .theme-option {
     width: 30px;
-    height: 32px;
-    padding: 6px;
-    flex-shrink: 0;
-  }
-  .theme-control select {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    min-width: 0;
-    opacity: 0;
+    height: 30px;
   }
 }
 /* Hide application controls and adapt the report layout for printing; these overrides do not change normal screen presentation. */
